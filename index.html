@@ -777,6 +777,7 @@
       position: absolute;
       top: 22px;
       right: 26px;
+      z-index: 10;
       background: none;
       border: none;
       cursor: pointer;
@@ -1838,7 +1839,9 @@
 
     // Close
     lightboxClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox || e.target.classList.contains('lb-viewport') || e.target.classList.contains('lb-slide')) closeLightbox();
+    });
     document.addEventListener('keydown', function(e) {
       if (!lightbox.classList.contains('is-open')) return;
       if (e.key === 'Escape') closeLightbox();
@@ -1876,8 +1879,8 @@
       }
     }
 
-    lbTrack.addEventListener('touchstart', function(e) { swipeStart(e.touches[0].clientX); }, { passive: true });
-    lbTrack.addEventListener('touchmove',  function(e) { swipeMove(e.touches[0].clientX); },  { passive: true });
+    lbTrack.addEventListener('touchstart', function(e) { swipeStart(e.touches[0].clientX); }, { passive: false });
+    lbTrack.addEventListener('touchmove',  function(e) { e.preventDefault(); swipeMove(e.touches[0].clientX); }, { passive: false });
     lbTrack.addEventListener('touchend',   swipeEnd);
     lbTrack.addEventListener('mousedown',  function(e) { e.preventDefault(); swipeStart(e.clientX); });
     document.addEventListener('mousemove', function(e) { swipeMove(e.clientX); });
