@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kawa Rzeszowska</title>
+  <link rel="stylesheet" href="https://use.typekit.net/kei4dah.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+
+    html {
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #000;
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background: #000;
+      overflow: hidden;
+    }
+
+    /* ─── BELOW FOLD ────────────────────────────────────────── */
+    .below-fold {
+      height: 100vh;
+      background: #fff;
+    }
+
+    /* ─── NAV ──────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 48px;
+    }
+
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav-link {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .nav-link:hover  { opacity: 1; }
+    .nav-link:active { opacity: 0.45; }
+    .nav-link:focus-visible {
+      outline: 1px solid rgba(255,255,255,0.45);
+      outline-offset: 5px;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 12px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ─── HAMBURGER ─────────────────────────────────────────── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      align-items: flex-end;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 110;
+    }
+
+    .hamburger-bar {
+      width: 22px;
+      height: 1.5px;
+      background: #fff;
+      display: block;
+      transition: transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+                  opacity   0.2s ease;
+    }
+
+    .hamburger.is-open .hamburger-bar:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+    .hamburger.is-open .hamburger-bar:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    .hamburger.is-open .hamburger-bar:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    /* ─── NAV OVERLAY ───────────────────────────────────────── */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-100%);
+      transition: opacity 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .nav-overlay.is-open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .nav-overlay.is-closing {
+      transition: opacity 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 1s cubic-bezier(0.7, 0, 0.95, 1);
+    }
+
+    /* ─── CLOSE BUTTON (X) in overlay ───────────────────────── */
+    .nav-overlay-close {
+      position: absolute;
+      top: 22px;
+      right: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      opacity: 0.7;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    .nav-overlay-close:hover  { opacity: 1; transform: scale(1.1); }
+    .nav-overlay-close:active { opacity: 0.4; transform: scale(0.9); }
+    .nav-overlay-close:focus-visible {
+      outline: 1px solid rgba(255,255,255,0.45);
+      outline-offset: 4px;
+    }
+    .nav-overlay-close svg {
+      width: 22px;
+      height: 22px;
+      stroke: #fff;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+    }
+
+    .nav-overlay-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .nav-overlay-link {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: clamp(28px, 8vw, 48px);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.215, 0.61, 0.355, 1),
+                  color 0.2s ease;
+    }
+
+    .nav-overlay.is-open .nav-overlay-link:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.32s; }
+    .nav-overlay.is-open .nav-overlay-link:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.42s; }
+    .nav-overlay.is-open .nav-overlay-link:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.52s; }
+    .nav-overlay.is-open .nav-overlay-link:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.62s; }
+
+    .nav-overlay-link:hover  { color: rgba(255,255,255,0.5); }
+    .nav-overlay-link:active { color: rgba(255,255,255,0.3); }
+
+    .nav-overlay-logo-link {
+      margin-top: 40px;
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .nav-overlay.is-open .nav-overlay-logo-link {
+      opacity: 0.55;
+      transform: translateY(0);
+      transition-delay: 0.72s;
+    }
+
+    .nav-overlay-logo-link:hover { opacity: 0.85; }
+    .nav-overlay-logo-link:active { opacity: 0.3; }
+
+    .nav-overlay-logo {
+      width: 72px;
+      display: block;
+    }
+
+    .nav-overlay-label {
+      position: absolute;
+      bottom: 40px;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ─── HEADLINE ─────────────────────────────────────────── */
+    .headline-wrap {
+      position: absolute;
+      top: 92px; /* 72px nav border + 20px gap */
+      left: 0;
+      right: 0;
+      z-index: 10;
+    }
+
+    .headline-inner {
+      position: relative;
+      width: 100%;
+      padding: 0;
+      opacity: 0;
+    }
+
+    .headline-line {
+      display: block;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-align: center;
+      width: 100%;
+      font-size: 100px;
+    }
+
+    /* ─── FLANKING ANNOTATION TEXT ─────────────────────────── */
+    .flank-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0 48px;
+      margin-top: 18px;
+    }
+
+    .flank-text {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.9;
+    }
+
+    .flank-text--right {
+      text-align: right;
+    }
+
+    /* ─── LOGO ─────────────────────────────────────────────── */
+    .hero-logo-wrap {
+      position: absolute;
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      width: clamp(360px, 36vw, 600px);
+    }
+
+    .hero-logo-wrap img,
+    .hero-logo-wrap video {
+      width: 100%;
+      display: block;
+    }
+
+    /* ─── HAIRLINE BORDER BELOW NAV ────────────────────────── */
+    .nav-border {
+      position: fixed;
+      top: 72px;
+      left: 48px;
+      right: 48px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      z-index: 25;
+    }
+
+    /* ─── NAV BRAND (mobile only) ──────────────────────────── */
+    .nav-mobile-brand {
+      display: none;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: 0.85;
+      white-space: nowrap;
+    }
+
+    /* ─── HERO TAGLINE (mobile only) ────────────────────────── */
+    .hero-tagline {
+      display: none;
+      position: absolute;
+      bottom: 7%;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      line-height: 2;
+      z-index: 25;
+    }
+
+    /* ─── O NAS ─────────────────────────────────────────────── */
+    .about {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .about-left {
+      width: 50%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 72px 72px;
+    }
+
+    .about-label {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      margin-bottom: 36px;
+    }
+
+    .about-heading {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: clamp(30px, 3.4vw, 52px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 18px;
+    }
+
+    .about-subheading {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 500;
+      font-style: italic;
+      font-size: clamp(13px, 1.1vw, 17px);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.48);
+      margin-bottom: 30px;
+    }
+
+    .about-divider {
+      width: 36px;
+      height: 1px;
+      background: rgba(255,255,255,0.18);
+      margin-bottom: 30px;
+    }
+
+    .about-body {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 400;
+      font-size: clamp(13px, 0.9vw, 15px);
+      line-height: 1.85;
+      color: rgba(255,255,255,0.58);
+      max-width: 380px;
+      margin-bottom: 48px;
+    }
+
+    .about-cta {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      gap: 10px;
+      width: fit-content;
+      position: relative;
+      padding-bottom: 5px;
+      transition: color 0.2s ease;
+    }
+
+    .about-cta::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.3);
+      transition: background 0.2s ease;
+    }
+
+    .about-cta:hover::after { background: rgba(255,255,255,0.9); }
+    .about-cta:active { color: rgba(255,255,255,0.45); }
+    .about-cta:focus-visible {
+      outline: 1px solid rgba(255,255,255,0.45);
+      outline-offset: 5px;
+    }
+
+    .about-right {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-img-wrap {
+      width: 100%;
+      height: 50%;
+      overflow: hidden;
+    }
+
+    .about-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .about-img-wrap:hover .about-img {
+      transform: scale(1.03);
+    }
+
+    /* ─── MENU ──────────────────────────────────────────────── */
+    .menu-section {
+      background: #0a0a0a;
+      height: auto;
+      padding: 32px 40px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+
+    .menu-heading {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: clamp(36px, 5vw, 72px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 36px;
+    }
+
+    /* ─── ACCORDION ─────────────────────────────────────────── */
+    .menu-accordion {
+      width: 100%;
+      max-width: 770px;
+    }
+
+    .menu-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 50px;
+    }
+
+    .menu-group:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .menu-group-label-wrap {
+      width: 245px;
+      flex-shrink: 0;
+    }
+
+    .menu-group-label-box {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      border: 1px solid #fff;
+      background: #fff;
+      padding: 13px 18px;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #000;
+      white-space: nowrap;
+    }
+
+    .menu-group-items {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .acc-item {
+      border: 1px solid rgba(255,255,255,0.75);
+    }
+
+    .acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 21px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fff;
+      transition: background 0.15s ease;
+    }
+
+    .acc-header:hover   { background: rgba(255,255,255,0.04); }
+    .acc-header:active  { background: rgba(255,255,255,0.08); }
+    .acc-header:focus-visible {
+      outline: 1px solid rgba(255,255,255,0.5);
+      outline-offset: -2px;
+    }
+
+    .acc-icon {
+      font-size: 25px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.85);
+      flex-shrink: 0;
+      line-height: 1;
+      width: 25px;
+      text-align: center;
+    }
+
+    .acc-body {
+      height: 0;
+      overflow: hidden;
+    }
+
+    .acc-body-inner {
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 21px 20px;
+    }
+
+    .acc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .acc-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .acc-row-info {
+      flex: 1;
+      padding-right: 20px;
+    }
+
+    .acc-row-name {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: 0.08em;
+      color: #fff;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .acc-row-desc {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.55;
+    }
+
+    .acc-row-price {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      color: #fff;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .menu-footer {
+      margin-top: 56px;
+      max-width: 770px;
+      width: 100%;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 28px;
+    }
+
+    .menu-footer p {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      line-height: 2;
+    }
+
+    /* ─── GALLERY ───────────────────────────────────────────── */
+    .gallery-section {
+      background: #000;
+      padding: 60px 40px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .gallery-heading {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: clamp(36px, 5vw, 72px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 36px;
+      width: 100%;
+      max-width: 1400px;
+      text-align: center;
+    }
+
+    .bento-grid {
+      width: 100%;
+      max-width: 1400px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 260px;
+      gap: 8px;
+    }
+
+    .bento-item {
+      overflow: hidden;
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .bento-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  opacity  0.3s ease;
+    }
+
+    .bento-item:hover img {
+      transform: scale(1.04);
+      opacity: 0.82;
+    }
+
+
+    /* ─── LIGHTBOX ───────────────────────────────────────────── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.93);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox.is-open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .lightbox-img {
+      max-width: min(88vw, 720px);
+      max-height: 90vh;
+      object-fit: contain;
+      box-shadow: 0 32px 100px rgba(0,0,0,0.9);
+      transform: scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .lightbox.is-open .lightbox-img {
+      transform: scale(1);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 22px;
+      right: 26px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      opacity: 0.6;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .lightbox-close:hover  { opacity: 1; transform: scale(1.1); }
+    .lightbox-close:active { opacity: 0.3; transform: scale(0.9); }
+    .lightbox-close:focus-visible {
+      outline: 1px solid rgba(255,255,255,0.4);
+      outline-offset: 4px;
+    }
+
+    .lightbox-close svg {
+      width: 22px;
+      height: 22px;
+      stroke: #fff;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+    }
+
+    /* ─── MARQUEE STRIP ─────────────────────────────────────── */
+    .marquee-strip {
+      width: 100%;
+      overflow: hidden;
+      background: #e8ddc8;
+      padding: 16px 0;
+      position: relative;
+      z-index: 5;
+    }
+
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .mq-item {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 21px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #100500;
+      padding: 0 22px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .mq-sep {
+      font-size: 11px;
+      color: rgba(16, 5, 0, 0.32);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* ─── CONTACT ───────────────────────────────────────────── */
+    .contact-section {
+      background: #0a0a0a;
+      padding: 80px 40px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .contact-heading {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: clamp(36px, 5vw, 72px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 56px;
+      text-align: center;
+    }
+
+    .contact-inner {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-bottom: 0;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      padding: 0 60px 80px 0;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .contact-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-label {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .contact-value {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      letter-spacing: 0.02em;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      letter-spacing: 0.02em;
+      color: #fff;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .contact-link:hover { opacity: 0.55; }
+    .contact-link:active { opacity: 0.35; }
+
+    .contact-link svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .contact-map {
+      padding: 0 0 0 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding-bottom: 80px;
+    }
+
+    .contact-map iframe {
+      width: 100%;
+      height: 320px;
+      border: 0;
+      border-radius: 12px;
+      opacity: 1;
+    }
+
+    .contact-footer-bar {
+      width: 100%;
+      max-width: 1100px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-footer-bar span {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ─── PAGE INTRO ────────────────────────────────────────── */
+    /* ─── SCROLL REVEAL ─────────────────────────────────────── */
+    .reveal, .reveal-left, .reveal-right {
+      opacity: 0;
+      transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .reveal       { transform: translateY(32px); }
+    .reveal-left  { transform: translateX(-32px); }
+    .reveal-right { transform: translateX(32px); }
+
+    .reveal.is-visible,
+    .reveal-left.is-visible,
+    .reveal-right.is-visible {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    /* sections need scroll-margin so fixed nav doesn't cover them */
+    #o-nas, #galeria, #menu, #kontakt {
+      scroll-margin-top: 64px;
+    }
+
+    /* ─── MOBILE ────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav {
+        padding: 22px 24px;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-mobile-brand {
+        display: block;
+      }
+
+      .nav-group {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-border {
+        display: none;
+      }
+
+      .headline-wrap {
+        top: 72px;
+      }
+
+      .flank-row {
+        display: none;
+      }
+
+      .hero-logo-wrap {
+        width: clamp(220px, 70vw, 360px);
+        bottom: 20%;
+      }
+
+      .hero-tagline {
+        display: block;
+      }
+
+      .about {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .about-left {
+        width: 100%;
+        padding: 64px 28px 80px;
+      }
+
+      .about-right {
+        width: 100%;
+        height: 60vw;
+        flex-direction: row;
+      }
+
+      .about-img-wrap {
+        height: 100%;
+        width: 50%;
+      }
+
+      .about-right {
+        order: -1;
+      }
+
+      .about-heading {
+        font-size: clamp(28px, 7vw, 44px);
+      }
+
+      .menu-section {
+        height: auto;
+        padding: 32px 20px 60px;
+        align-items: flex-start;
+      }
+
+      .menu-accordion {
+        max-width: 100%;
+      }
+
+      .menu-group {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .menu-group-label-wrap {
+        width: auto;
+        padding-top: 0;
+      }
+
+      .acc-header {
+        padding: 16px 18px;
+        font-size: 14px;
+      }
+
+      .acc-icon {
+        font-size: 22px;
+        width: 22px;
+      }
+
+      .menu-group-label-box {
+        font-size: 12px;
+        padding: 10px 14px;
+      }
+
+      .acc-row-name {
+        font-size: 14px;
+      }
+
+      .acc-row-desc {
+        font-size: 12px;
+      }
+
+      .acc-row-price {
+        font-size: 14px;
+      }
+
+      .acc-body-inner {
+        padding: 8px 18px 16px;
+      }
+
+      .acc-row {
+        padding: 12px 0;
+      }
+
+      .gallery-section {
+        padding: 40px 16px 60px;
+      }
+
+      .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 180px;
+      }
+
+      .contact-section {
+        padding: 60px 24px 0;
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-info {
+        padding: 0 0 48px 0;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .contact-map {
+        padding: 48px 0 60px;
+      }
+
+      .contact-map iframe {
+        height: 240px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile nav overlay -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <button class="nav-overlay-close" id="navClose" aria-label="Zamknij menu">
+      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="3" y1="3" x2="19" y2="19"/>
+        <line x1="19" y1="3" x2="3" y2="19"/>
+      </svg>
+    </button>
+    <nav class="nav-overlay-links">
+      <a href="#menu" class="nav-overlay-link">Menu</a>
+      <a href="#galeria" class="nav-overlay-link">Galeria</a>
+      <a href="#o-nas" class="nav-overlay-link">O nas</a>
+      <a href="#kontakt" class="nav-overlay-link">Kontakt</a>
+      <a href="#" class="nav-overlay-logo-link">
+        <img src="kontekst_do_strony/logo%20kawa%20rzeszowska%20bez%20napisu.png" alt="Kawa Rzeszowska" class="nav-overlay-logo">
+      </a>
+    </nav>
+    <span class="nav-overlay-label">Kawa Rzeszowska</span>
+  </div>
+
+  <section class="hero">
+
+    <!-- Nav -->
+    <nav class="nav">
+      <!-- Brand name visible on mobile -->
+      <span class="nav-mobile-brand">Kawa Rzeszowska</span>
+
+      <div class="nav-group">
+        <a href="#menu" class="nav-link">Menu</a>
+        <div class="nav-divider"></div>
+        <a href="#galeria" class="nav-link">Galeria</a>
+      </div>
+
+      <!-- Hamburger (mobile only) -->
+      <button class="hamburger" id="hamburger" aria-label="Otwórz menu" aria-expanded="false">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+
+      <div class="nav-group">
+        <a href="#o-nas" class="nav-link">O nas</a>
+        <div class="nav-divider"></div>
+        <a href="#kontakt" class="nav-link">Kontakt</a>
+      </div>
+    </nav>
+
+    <div class="nav-border"></div>
+
+    <!-- Headline -->
+    <div class="headline-wrap">
+      <div class="headline-inner">
+        <span class="headline-line" id="lineFull">Kawa Rzeszowska</span>
+      </div>
+
+      <!-- Annotation flanking text -->
+      <div class="flank-row">
+        <div class="flank-text">
+          Kawa z charakterem.<br>Smak Rzeszowa.
+        </div>
+        <div class="flank-text flank-text--right">
+          Serce<br>Starego Miasta.
+        </div>
+      </div>
+    </div>
+
+    <!-- Logo -->
+    <div class="hero-logo-wrap">
+      <img src="kontekst_do_strony/logo%20kawa%20rzeszowska%20bez%20napisu.png" alt="Kawa Rzeszowska">
+    </div>
+
+    <!-- Mobile tagline below video -->
+    <p class="hero-tagline">Kawa z charakterem.<br>Smak Rzeszowa.</p>
+
+  </section>
+
+  <!-- O nas -->
+  <section class="about" id="o-nas">
+    <div class="about-left">
+      <p class="about-label reveal" style="transition-delay:0s">— O nas</p>
+      <h2 class="about-heading reveal" style="transition-delay:0.1s">Poznaj naszą<br>historię</h2>
+      <p class="about-subheading reveal" style="transition-delay:0.2s">Od 10 lat w sercu Rzeszowa.</p>
+      <div class="about-divider reveal" style="transition-delay:0.3s"></div>
+      <p class="about-body reveal" style="transition-delay:0.4s">Znajdziesz nas przy ul. Kościuszki 3. Serwujemy kawę, świeże śniadania, brioszki, tosty i domowe lemoniady. Mamy też kącik dla najmłodszych — bo dobra kawa smakuje lepiej gdy cała rodzina jest razem.</p>
+      <a href="#kontakt" class="about-cta reveal" style="transition-delay:0.5s">Znajdź nas →</a>
+    </div>
+    <div class="about-right reveal-right" style="transition-delay:0.15s">
+      <div class="about-img-wrap">
+        <img class="about-img" src="kontekst_do_strony/kawa%20rzeszowska%20wnetrze.png" alt="Wnętrze Kawa Rzeszowska">
+      </div>
+      <div class="about-img-wrap">
+        <img class="about-img" src="kontekst_do_strony/kawa%20rzeszowska%20wnetrze%202.png" alt="Wnętrze Kawa Rzeszowska">
+      </div>
+    </div>
+  </section>
+
+  <!-- Scrolling Marquee Strip -->
+  <div class="marquee-strip" aria-hidden="true" role="presentation">
+    <div class="marquee-track" id="marqueeTrack"><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span></div>
+  </div>
+
+  <!-- Gallery -->
+  <section class="gallery-section" id="galeria">
+    <h2 class="gallery-heading reveal">Galeria</h2>
+    <div class="bento-grid">
+      <div class="bento-item reveal" style="transition-delay:0s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20%20kawa.png" alt="Kawa" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.07s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20bowl.png" alt="Bowl" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.14s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastka.png" alt="Ciastka" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.21s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%202.png" alt="Ciastko" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.1s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%203.png" alt="Ciastko" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.17s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%204.png" alt="Ciastko" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.24s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko.png" alt="Ciastko" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.31s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20drozdzowki.png" alt="Drozdzowki" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.2s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ejdzenie.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.27s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20gofry%201.png" alt="Gofry" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.34s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20jakies%20jedzneie.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.41s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20jedzenie%202.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.3s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20karmadnmopnkii.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.37s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20napoj.png" alt="Napoj" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.44s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20sniadanie.png" alt="Sniadanie" loading="lazy"></div>
+      <div class="bento-item reveal" style="transition-delay:0.51s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20wiecej%20jedzenia.png" alt="Jedzenie" loading="lazy"></div>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="menu-section" id="menu">
+    <h2 class="menu-heading reveal">Menu</h2>
+    <div class="menu-accordion">
+
+      <!-- ── NAPOJE ── -->
+      <div class="menu-group reveal" style="transition-delay:0.1s">
+        <div class="menu-group-label-wrap">
+          <span class="menu-group-label-box">Napoje</span>
+        </div>
+        <div class="menu-group-items">
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Kawa</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Espresso</span></div><span class="acc-row-price">7 / 9 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Americano</span></div><span class="acc-row-price">10 / 12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Flat White</span></div><span class="acc-row-price">13 / 14 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Latte</span></div><span class="acc-row-price">12 / 14 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Cappuccino</span></div><span class="acc-row-price">11 / 14 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Przelew dnia</span></div><span class="acc-row-price">10 / 12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Aeropress</span></div><span class="acc-row-price">14 / 15 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Chemex</span></div><span class="acc-row-price">22 / 25 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Spiced Honey Flat White</span></div><span class="acc-row-price">15 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Pumpkin Spice Latte</span></div><span class="acc-row-price">18 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Piernikowe Latte</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Chai Latte</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Mocha</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Blackberry Mocha</span></div><span class="acc-row-price">19 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Herbata</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Herbata</span><span class="acc-row-desc">earl grey / assam / piękna / jaśminowa / owocowa / ziołowa</span></div><span class="acc-row-price">12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Herbata rozgrzewająca</span><span class="acc-row-desc">syrop malinowy, imbir, goździki, cynamon, kardamon, pomarańcza, jagody goji</span></div><span class="acc-row-price">18 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Napar</span><span class="acc-row-desc">Cytryna-Imbir / Pomarańcza-Rozmaryn / Mango-Mięta</span></div><span class="acc-row-price">16 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Matcha</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Matcha Latte</span></div><span class="acc-row-price">15 / 16 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Różana Matcha Latte</span></div><span class="acc-row-price">18 / 19 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Korzenna Matcha Latte</span></div><span class="acc-row-price">18 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Blackberry White Matcha</span></div><span class="acc-row-price">19 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Czekolada</span><span class="acc-row-desc">Klasyczna / Chili</span></div><span class="acc-row-price">16 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Inne Napoje</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Iced Latte / Flat</span><span class="acc-row-desc">syrop +3 zł</span></div><span class="acc-row-price">15 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Espresso Tonic</span></div><span class="acc-row-price">16 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Espresso Orange</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Iced Americano</span></div><span class="acc-row-price">13 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Przelew na lodzie</span></div><span class="acc-row-price">13 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Nitro Cold Brew</span></div><span class="acc-row-price">15 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Iced Matcha Latte</span></div><span class="acc-row-price">16 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Różana Iced Matcha Latte</span></div><span class="acc-row-price">19 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Truskawkowa Iced Matcha Latte</span></div><span class="acc-row-price">19 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Mango Iced Matcha Latte</span></div><span class="acc-row-price">19 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Matcha Tonic / Orange</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Lemoniady</span><span class="acc-row-desc">Cytryna-Mięta / Róża-Hibiskus / Truskawka-Jaśmin (dodaj matchę +5 zł)</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Mrożone herbaty</span><span class="acc-row-desc">Malina-Rozmaryn / Limonka-Jaśmin / Brzoskwinia-Hibiskus</span></div><span class="acc-row-price">16 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Soki świeżo wyciskane 350ml</span><span class="acc-row-desc">Pomarańcza / Grejpfrut / Mix</span></div><span class="acc-row-price">18 / 20 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Smoothie</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Marakuja-Mango-Banan</span></div><span class="acc-row-price">20 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Smoczy Owoc-Truskawka-Banan</span></div><span class="acc-row-price">20 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Coffee Cocktails Menu</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Ish Gin &amp; Tonic</span></div><span class="acc-row-price">18 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Ish Spritz</span></div><span class="acc-row-price">18 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Piwo</span></div><span class="acc-row-price">17 zł</span></div>
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── ŚNIADANIE / LUNCH ── -->
+      <div class="menu-group reveal" style="transition-delay:0.2s">
+        <div class="menu-group-label-wrap">
+          <span class="menu-group-label-box">Śniadanie / Lunch</span>
+        </div>
+        <div class="menu-group-items">
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>French Toasts</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Hot Honey Halloumi Briosz</span><span class="acc-row-desc">grillowana brioszka, ubijana ricotta, grillowane halloumi, rukola, pikantny miód na ciepło, pestki granatu, orzechy włoskie, sezam</span></div><span class="acc-row-price">35 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Biscoff French Tost</span><span class="acc-row-desc">brioszka smażona na maśle z cynamonem, krem biscoff, mus z czarnej porzeczki, ubijana ricotta, chipsy bananowe, owoce, maślana kruszonka</span></div><span class="acc-row-price">35 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Grzanki</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Awokado Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie, pikantne guacamole, jajko sadzone, rukola, pomidorki koktajlowe, borówki, kiełki, płatki chili, szczypiorek, nasiona (dodaj łososia +8 zł)</span></div><span class="acc-row-price">32 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Burrata Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie, burrata, pieczone pomidorki koktajlowe, czerwone pesto, karmelizowana czerwona cebula, oliwa czosnkowa, ser grana padano, listki bazylii, sezam</span></div><span class="acc-row-price">34 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Halloumi Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie, grillowane halloumi, awokado, rukola, piklowana czerwona cebula, sos sriracha-mayo, kiełki, sezam</span></div><span class="acc-row-price">32 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Dyniowy Feta Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie, puszysta dyniowa feta z ricottą, pieczone pomidorki koktajlowe, kurki w maśle z tymiankiem, sezam</span></div><span class="acc-row-price">32 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Zapieksa Premium</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie zapieczona z boczniakami, szpinakiem i cheddarem, kimchi, piklowana czerwona cebula, szczypiorek, ajvar, sezam</span></div><span class="acc-row-price">32 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Chorizo Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie zapieczona z sosem cheddarowym i jalapeño, karmelizowana czerwona cebula, grillowane chorizo, rukola, sezam</span></div><span class="acc-row-price">32 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Funky Bowl</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Hummus Bowl [v]</span><span class="acc-row-desc">hummus, pieczony kalafior, pikantna ciecierzyca, szpinak, papryka, marynowana czerwona cebula, pomidorki koktajlowe, sos orzechowy z miso, szczypiorek, sezam</span></div><span class="acc-row-price">34 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Tofucznica [v]</span><span class="acc-row-desc">tofu smażone z papryką, czerwoną cebulą, szpinakiem i sosem sojowym, sałatka sezonowa, pikantne guacamole, grillowana pajda chleba na zakwasie, szczypiorek, nasiona, kiełki</span></div><span class="acc-row-price">30 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Klasyki</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Jajecznica</span><span class="acc-row-desc">z trzech jajek, smażona na maśle, grillowana pajda chleba na zakwasie, sałatka sezonowa, kiełki, szczypiorek, nasiona — do wyboru: bekon / awokado / łosoś</span></div><span class="acc-row-price">30 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Jajka po Benedyktyńsku</span><span class="acc-row-desc">dwa jajka w koszulkach na grillowanej pajdzie chleba na zakwasie, szpinak, sos holenderski, szczypiorek, kiełki, nasiona — do wyboru: szynka parmeńska / awokado / łosoś</span></div><span class="acc-row-price">32 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Jajka z Harrisą</span><span class="acc-row-desc">dwa jajka sadzone na paście harrisa, labneh, pieczone pomidorki koktajlowe z czosnkiem, miód tymiankowy, grillowana pajda chleba na zakwasie, nasiona</span></div><span class="acc-row-price">30 zł</span></div>
+            </div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-header" aria-expanded="false"><span>Dla Najmłodszych</span><span class="acc-icon">+</span></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Jajecznica</span><span class="acc-row-desc">z dwóch jajek na maśle z grillowanym pieczywem, pomidorki koktajlowe, ogórek</span></div><span class="acc-row-price">20 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Tost z Serem i Szynką</span><span class="acc-row-desc">tostowana brioszka z cheddarem i serkiem kremowym, szynka, pomidorki koktajlowe, szczypiorek, ketchup</span></div><span class="acc-row-price">20 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Serniczki</span><span class="acc-row-desc">trzy placuszki twarogowe, śmietana, wiśnie, maślana kruszonka, płatki migdałów, borówki</span></div><span class="acc-row-price">20 zł</span></div>
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── FOOTER INFO ── -->
+      <div class="menu-footer">
+        <p>Mleko roślinne +3 zł &nbsp;·&nbsp; Mleko bez laktozy +1 zł &nbsp;·&nbsp; Syrop +3 zł &nbsp;·&nbsp; Dodatkowy składnik +8 zł</p>
+        <p>Kuchnia otwarta do godz. 15:00 lub do wyczerpania zapasów. Zamówienia przyjmujemy przy barze.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Kontakt -->
+  <section class="contact-section" id="kontakt">
+    <h2 class="contact-heading reveal">Kontakt</h2>
+    <div class="contact-inner">
+
+      <div class="contact-info reveal-left" style="transition-delay:0.1s">
+
+        <div class="contact-block">
+          <span class="contact-label">Adres</span>
+          <span class="contact-value">Kościuszki 3<br>Rzeszów 35-030</span>
+        </div>
+
+        <div class="contact-block">
+          <span class="contact-label">Instagram</span>
+          <a class="contact-link" href="https://www.instagram.com/kawarzeszowska/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="0.7" fill="currentColor" stroke="none"/>
+            </svg>
+            @kawarzeszowska
+          </a>
+        </div>
+
+        <div class="contact-block">
+          <span class="contact-label">Facebook</span>
+          <a class="contact-link" href="https://www.facebook.com/search/top?q=kawa%20rzeszowska" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+            Kawa Rzeszowska
+          </a>
+        </div>
+
+      </div>
+
+      <div class="contact-map reveal-right" style="transition-delay:0.2s">
+        <iframe
+          src="https://maps.google.com/maps?q=Ko%C5%9Bciuszki+3%2C+35-030+Rzesz%C3%B3w&hl=pl&z=17&output=embed"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Mapa Kawa Rzeszowska"
+        ></iframe>
+      </div>
+
+    </div>
+
+    <div class="contact-footer-bar">
+      <span>© 2025 Kawa Rzeszowska &nbsp;·&nbsp; Kościuszki 3, Rzeszów</span>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Powiększone menu">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Zamknij">
+      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="3" y1="3" x2="19" y2="19"/>
+        <line x1="19" y1="3" x2="3" y2="19"/>
+      </svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    // ── Fit text to viewport width ──────────────────────────────
+    function fitLine(el, targetRatio) {
+      const target = window.innerWidth * (targetRatio || 0.96);
+      el.style.width = 'max-content';
+      let lo = 8, hi = 900;
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        el.style.fontSize = mid + 'px';
+        el.getBoundingClientRect().width <= target ? (lo = mid) : (hi = mid - 1);
+      }
+      el.style.fontSize = lo + 'px';
+      el.style.width = '100%';
+    }
+
+    // ── Hero GSAP entrance ──────────────────────────────────────
+    let heroLetters = null;
+
+    function splitText(el) {
+      const text = el.textContent.trim();
+      el.textContent = '';
+      return text.split('').map(char => {
+        const span = document.createElement('span');
+        span.textContent = char === ' ' ? '\u00A0' : char;
+        span.style.display = 'inline-block';
+        el.appendChild(span);
+        return span;
+      });
+    }
+
+    function heroEntranceAnim(letters) {
+      const fadeEls = ['.nav', '.nav-border', '.flank-row',
+                       '.hero-logo-wrap', '.hero-tagline',
+                       '.hamburger', '.nav-mobile-brand']
+        .map(sel => document.querySelector(sel)).filter(Boolean);
+
+      // Odkryj kontener (ukryty w CSS) i od razu ustaw litery poza ekranem
+      const lineEl = document.getElementById('lineFull');
+      lineEl.parentElement.style.opacity = '1';
+      gsap.set(letters, { x: -window.innerWidth * 0.75, opacity: 0 });
+      gsap.set(fadeEls, { opacity: 0 });
+
+      const tl = gsap.timeline();
+
+      tl.to(letters, {
+        x: 0, opacity: 1,
+        duration: 1.1,
+        stagger: { each: 0.055, from: 'start' },
+        ease: 'power3.out',
+      })
+      .to(fadeEls, {
+        opacity: 1,
+        duration: 0.5,
+        ease: 'power2.out',
+      }, '-=0.5');
+    }
+
+    async function initHero(isResize) {
+      await document.fonts.load('700 1em brandon-grotesque');
+      await document.fonts.ready;
+      const lineEl = document.getElementById('lineFull');
+      if (!heroLetters) {
+        fitLine(lineEl, 0.96);
+        heroLetters = splitText(lineEl);
+        if (!isResize) heroEntranceAnim(heroLetters);
+      } else {
+        fitLine(lineEl, 0.96);
+      }
+    }
+
+    initHero(false);
+    window.addEventListener('resize', () => initHero(true));
+
+    // ── Hamburger / overlay ─────────────────────────────────────
+    const hamburger  = document.getElementById('hamburger');
+    const overlay    = document.getElementById('navOverlay');
+    const navClose   = document.getElementById('navClose');
+    let isOpen = false;
+
+    function openMenu() {
+      isOpen = true;
+      hamburger.classList.add('is-open');
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      hamburger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      isOpen = false;
+      hamburger.classList.remove('is-open');
+      overlay.classList.add('is-closing');
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      overlay.addEventListener('transitionend', function handler(e) {
+        if (e.propertyName === 'transform') {
+          overlay.classList.remove('is-closing');
+          overlay.removeEventListener('transitionend', handler);
+        }
+      });
+    }
+
+    hamburger.addEventListener('click', () => isOpen ? closeMenu() : openMenu());
+    navClose.addEventListener('click', closeMenu);
+
+    // Close on overlay link click
+    overlay.querySelectorAll('.nav-overlay-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+    overlay.querySelector('.nav-overlay-logo-link').addEventListener('click', closeMenu);
+
+    // Close on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isOpen) closeMenu();
+    });
+
+    // ── Scroll-driven headline parallax ─────────────────────────
+    // Headline "floats" in place while page scrolls — logo rises and passes over it
+    const headlineWrap = document.querySelector('.headline-wrap');
+    const heroEl = document.querySelector('.hero');
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      const heroHeight = heroEl.offsetHeight;
+      // Only apply within the hero scroll range
+      const clampedY = Math.min(scrollY, heroHeight);
+      // translateY = scrollY cancels the scroll → headline stays fixed in viewport
+      headlineWrap.style.transform = `translateY(${clampedY}px)`;
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Lightbox ─────────────────────────────────────────────────
+    const lightbox     = document.getElementById('lightbox');
+    const lightboxImg  = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(src, alt) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt;
+      lightbox.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.menu-card').forEach(card => {
+      const open = () => {
+        const img = card.querySelector('.menu-card-img');
+        openLightbox(img.src, img.alt);
+      };
+      card.addEventListener('click', open);
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox(); });
+
+    // ── Accordion ───────────────────────────────────────────────
+    document.querySelectorAll('.acc-header').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item  = this.closest('.acc-item');
+        var body  = item.querySelector('.acc-body');
+        var icon  = this.querySelector('.acc-icon');
+        var isOpen = item.classList.contains('is-open');
+        var ease  = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
+
+        if (isOpen) {
+          // Close: lock current pixel height → animate to 0
+          body.style.height     = body.offsetHeight + 'px';
+          body.offsetHeight;                                   // force reflow
+          body.style.transition = 'height 0.38s ' + ease;
+          body.style.height     = '0';
+          item.classList.remove('is-open');
+          this.setAttribute('aria-expanded', 'false');
+          icon.textContent = '+';
+        } else {
+          // Open: animate from 0 → real scroll height
+          body.style.transition = 'height 0.38s ' + ease;
+          body.style.height     = body.scrollHeight + 'px';
+          item.classList.add('is-open');
+          this.setAttribute('aria-expanded', 'true');
+          icon.textContent = '−';
+          body.addEventListener('transitionend', function done() {
+            body.style.transition = '';
+            body.style.height     = 'auto';
+            body.removeEventListener('transitionend', done);
+          });
+        }
+      });
+    });
+
+    // ── Scroll-driven Marquee ───────────────────────────────────
+    (function() {
+      const track = document.getElementById('marqueeTrack');
+      if (!track) return;
+
+      // Duplicate content for seamless infinite loop
+      Array.from(track.children).forEach(function(child) {
+        track.appendChild(child.cloneNode(true));
+      });
+
+      var offset = 0;
+      var lastScrollY = window.scrollY;
+      var segW = 0;
+
+      function calcSeg() {
+        segW = track.scrollWidth / 2;
+      }
+
+      document.fonts.ready.then(calcSeg);
+      window.addEventListener('resize', calcSeg, { passive: true });
+
+      window.addEventListener('scroll', function() {
+        var y = window.scrollY;
+        var delta = y - lastScrollY;
+        lastScrollY = y;
+
+        offset -= delta * 0.5;   // scroll down → offset decreases → moves left
+
+        if (!segW) calcSeg();
+
+        if (segW > 0) {
+          while (offset <= -segW) offset += segW;
+          while (offset > 0)      offset -= segW;
+        }
+
+        track.style.transform = 'translateX(' + offset + 'px)';
+      }, { passive: true });
+    })();
+
+    // ── Scroll reveal (IntersectionObserver) ────────────────────
+    (function() {
+      var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+      if (!revealEls.length) return;
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealEls.forEach(function(el) { observer.observe(el); });
+    })();
+
+    // ── Nav anchor smooth-scroll with fixed-header offset ───────
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var href = link.getAttribute('href');
+        if (href === '#') return;
+        var target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        var navH = document.querySelector('.nav') ? document.querySelector('.nav').offsetHeight : 64;
+        var top = target.getBoundingClientRect().top + window.scrollY - navH;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
