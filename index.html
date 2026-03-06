@@ -11,6 +11,8 @@
       box-sizing: border-box;
       padding: 0;
       margin: 0;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     html {
@@ -732,17 +734,43 @@
       pointer-events: all;
     }
 
-    .lightbox-img {
-      max-width: min(88vw, 720px);
-      max-height: 90vh;
-      object-fit: contain;
-      box-shadow: 0 32px 100px rgba(0,0,0,0.9);
-      transform: scale(0.9);
-      transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+    .lb-viewport {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
     }
 
-    .lightbox.is-open .lightbox-img {
-      transform: scale(1);
+    .lb-track {
+      display: flex;
+      align-items: center;
+      transition: transform 0.38s cubic-bezier(0.215, 0.61, 0.355, 1);
+      will-change: transform;
+      cursor: grab;
+    }
+
+    .lb-track.is-dragging {
+      transition: none;
+      cursor: grabbing;
+    }
+
+    .lb-slide {
+      flex: 0 0 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+    }
+
+    .lb-slide img {
+      max-width: min(88vw, 900px);
+      max-height: 86vh;
+      object-fit: contain;
+      box-shadow: 0 32px 100px rgba(0,0,0,0.9);
+      user-select: none;
+      pointer-events: none;
+      border-radius: 2px;
     }
 
     .lightbox-close {
@@ -1582,7 +1610,9 @@
         <line x1="19" y1="3" x2="3" y2="19"/>
       </svg>
     </button>
-    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <div class="lb-viewport">
+      <div class="lb-track" id="lbTrack"></div>
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1740,14 +1770,44 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // ── Lightbox ─────────────────────────────────────────────────
-    const lightbox     = document.getElementById('lightbox');
-    const lightboxImg  = document.getElementById('lightboxImg');
+    // ── Lightbox z swipe ─────────────────────────────────────────
+    const lightbox      = document.getElementById('lightbox');
+    const lbTrack       = document.getElementById('lbTrack');
     const lightboxClose = document.getElementById('lightboxClose');
 
-    function openLightbox(src, alt) {
-      lightboxImg.src = src;
-      lightboxImg.alt = alt;
+    let lbImages  = [];
+    let lbIndex   = 0;
+
+    function buildTrack(images) {
+      lbTrack.innerHTML = '';
+      images.forEach(function(img) {
+        const slide = document.createElement('div');
+        slide.className = 'lb-slide';
+        const i = document.createElement('img');
+        i.src = img.src;
+        i.alt = img.alt || '';
+        slide.appendChild(i);
+        lbTrack.appendChild(slide);
+      });
+    }
+
+    function goToSlide(idx, animated) {
+      idx = Math.max(0, Math.min(idx, lbImages.length - 1));
+      lbIndex = idx;
+      if (animated === false) {
+        lbTrack.style.transition = 'none';
+      }
+      lbTrack.style.transform = 'translateX(' + (-lbIndex * window.innerWidth) + 'px)';
+      if (animated === false) {
+        lbTrack.offsetHeight; // force reflow
+        lbTrack.style.transition = '';
+      }
+    }
+
+    function openLightbox(images, startIndex) {
+      lbImages = images;
+      buildTrack(images);
+      goToSlide(startIndex, false);
       lightbox.classList.add('is-open');
       document.body.style.overflow = 'hidden';
     }
@@ -1757,18 +1817,71 @@
       document.body.style.overflow = '';
     }
 
-    document.querySelectorAll('.menu-card').forEach(card => {
-      const open = () => {
-        const img = card.querySelector('.menu-card-img');
-        openLightbox(img.src, img.alt);
-      };
-      card.addEventListener('click', open);
-      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    // Gallery bento items
+    const galleryImgs = Array.from(document.querySelectorAll('.bento-item img'));
+    galleryImgs.forEach(function(img, i) {
+      img.closest('.bento-item').style.cursor = 'pointer';
+      img.closest('.bento-item').addEventListener('click', function() {
+        openLightbox(galleryImgs, i);
+      });
     });
 
+    // Menu cards (single image)
+    document.querySelectorAll('.menu-card').forEach(function(card) {
+      const open = function() {
+        const img = card.querySelector('.menu-card-img');
+        openLightbox([img], 0);
+      };
+      card.addEventListener('click', open);
+      card.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    });
+
+    // Close
     lightboxClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox(); });
+    lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', function(e) {
+      if (!lightbox.classList.contains('is-open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft')  goToSlide(lbIndex - 1);
+      if (e.key === 'ArrowRight') goToSlide(lbIndex + 1);
+    });
+
+    // Swipe / drag
+    var dragStartX = 0, dragCurX = 0, dragging = false;
+
+    function swipeStart(x) {
+      dragStartX = x;
+      dragCurX   = x;
+      dragging   = true;
+      lbTrack.classList.add('is-dragging');
+    }
+
+    function swipeMove(x) {
+      if (!dragging) return;
+      dragCurX = x;
+      var delta = dragCurX - dragStartX;
+      lbTrack.style.transform = 'translateX(' + (-lbIndex * window.innerWidth + delta) + 'px)';
+    }
+
+    function swipeEnd() {
+      if (!dragging) return;
+      dragging = false;
+      lbTrack.classList.remove('is-dragging');
+      lbTrack.style.transition = '';
+      var delta = dragCurX - dragStartX;
+      if (Math.abs(delta) > 60) {
+        goToSlide(delta < 0 ? lbIndex + 1 : lbIndex - 1);
+      } else {
+        goToSlide(lbIndex);
+      }
+    }
+
+    lbTrack.addEventListener('touchstart', function(e) { swipeStart(e.touches[0].clientX); }, { passive: true });
+    lbTrack.addEventListener('touchmove',  function(e) { swipeMove(e.touches[0].clientX); },  { passive: true });
+    lbTrack.addEventListener('touchend',   swipeEnd);
+    lbTrack.addEventListener('mousedown',  function(e) { e.preventDefault(); swipeStart(e.clientX); });
+    document.addEventListener('mousemove', function(e) { swipeMove(e.clientX); });
+    document.addEventListener('mouseup',   swipeEnd);
 
     // ── Accordion ───────────────────────────────────────────────
     document.querySelectorAll('.acc-header').forEach(function(btn) {
