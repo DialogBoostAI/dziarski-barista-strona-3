@@ -252,6 +252,8 @@
       width: 100%;
       padding: 0;
       opacity: 0;
+      perspective: 900px;
+      transform-style: preserve-3d;
     }
 
     .headline-line {
@@ -953,6 +955,109 @@
       scroll-margin-top: 64px;
     }
 
+    /* ─── 3D SCENE SECTION ──────────────────────────────────── */
+    .scene-section {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background: #0a0805;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .scene-section::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 6;
+    }
+    .scene-stage {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+    }
+    .scene-section { perspective: 1100px; }
+    .scene-layer {
+      position: absolute;
+      overflow: hidden;
+      border-radius: 3px;
+    }
+    .scene-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .scene-layer--back {
+      top: 4%;
+      left: 50%;
+      width: 62%;
+      height: 68%;
+      transform: translateX(-50%) translateZ(-160px) scale(1.22);
+      opacity: 0.55;
+      filter: brightness(0.55) saturate(0.8);
+    }
+    .scene-layer--mid {
+      top: 18%;
+      right: 6%;
+      width: 30%;
+      height: 52%;
+      transform: translateZ(0px);
+      box-shadow: 0 40px 90px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    .scene-layer--front {
+      bottom: 14%;
+      left: 6%;
+      width: 27%;
+      height: 46%;
+      transform: translateZ(110px) scale(0.92);
+      box-shadow: 0 60px 110px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.08);
+    }
+    .scene-copy {
+      position: absolute;
+      bottom: 9%;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 5;
+      padding: 0 32px;
+    }
+    .scene-eyebrow {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      display: block;
+      margin-bottom: 14px;
+      opacity: 0;
+    }
+    .scene-title {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: clamp(30px, 5.5vw, 82px);
+      line-height: 1.06;
+      color: #fff;
+      letter-spacing: -0.025em;
+      clip-path: inset(0 100% 0 0);
+    }
+
+    /* ─── BENTO HOVER 3D ────────────────────────────────────── */
+    .bento-item {
+      transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
+                  box-shadow 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+      will-change: transform;
+    }
+    .bento-item:hover {
+      transform: perspective(600px) rotateX(-3deg) rotateY(3deg) scale(1.04);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+      z-index: 2;
+    }
+
     /* ─── MOBILE ────────────────────────────────────────────── */
     @media (max-width: 768px) {
       .nav {
@@ -1105,6 +1210,28 @@
         padding: 48px 0 60px;
       }
 
+      .scene-layer--back {
+        width: 94%;
+        height: 52%;
+        top: 6%;
+        transform: translateX(-50%) translateZ(-80px) scale(1.1);
+      }
+      .scene-layer--mid {
+        right: 3%;
+        width: 46%;
+        height: 38%;
+        top: 30%;
+      }
+      .scene-layer--front {
+        left: 3%;
+        width: 42%;
+        height: 34%;
+        bottom: 20%;
+        transform: translateZ(60px) scale(0.95);
+      }
+      .scene-copy { bottom: 5%; }
+      .scene-title { font-size: clamp(26px, 8vw, 48px); }
+
       .contact-map iframe {
         height: 240px;
       }
@@ -1192,14 +1319,14 @@
   <!-- O nas -->
   <section class="about" id="o-nas">
     <div class="about-left">
-      <p class="about-label reveal" style="transition-delay:0s">— O nas</p>
-      <h2 class="about-heading reveal" style="transition-delay:0.1s">Poznaj naszą<br>historię</h2>
-      <p class="about-subheading reveal" style="transition-delay:0.2s">Od 10 lat w sercu Rzeszowa.</p>
-      <div class="about-divider reveal" style="transition-delay:0.3s"></div>
-      <p class="about-body reveal" style="transition-delay:0.4s">Znajdziesz nas przy ul. Kościuszki 3. Serwujemy kawę, świeże śniadania, brioszki, tosty i domowe lemoniady. Mamy też kącik dla najmłodszych — bo dobra kawa smakuje lepiej gdy cała rodzina jest razem.</p>
-      <a href="#kontakt" class="about-cta reveal" style="transition-delay:0.5s">Znajdź nas →</a>
+      <p class="about-label">— O nas</p>
+      <h2 class="about-heading">Poznaj naszą<br>historię</h2>
+      <p class="about-subheading">Od 10 lat w sercu Rzeszowa.</p>
+      <div class="about-divider"></div>
+      <p class="about-body">Znajdziesz nas przy ul. Kościuszki 3. Serwujemy kawę, świeże śniadania, brioszki, tosty i domowe lemoniady. Mamy też kącik dla najmłodszych — bo dobra kawa smakuje lepiej gdy cała rodzina jest razem.</p>
+      <a href="#kontakt" class="about-cta">Znajdź nas →</a>
     </div>
-    <div class="about-right reveal-right" style="transition-delay:0.15s">
+    <div class="about-right">
       <div class="about-img-wrap">
         <img class="about-img" src="kontekst_do_strony/kawa%20rzeszowska%20wnetrze.png" alt="Wnętrze Kawa Rzeszowska">
       </div>
@@ -1216,34 +1343,34 @@
 
   <!-- Gallery -->
   <section class="gallery-section" id="galeria">
-    <h2 class="gallery-heading reveal">Galeria</h2>
+    <h2 class="gallery-heading">Galeria</h2>
     <div class="bento-grid">
-      <div class="bento-item reveal" style="transition-delay:0s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20%20kawa.png" alt="Kawa" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.07s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20bowl.png" alt="Bowl" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.14s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastka.png" alt="Ciastka" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.21s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%202.png" alt="Ciastko" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.1s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%203.png" alt="Ciastko" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.17s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%204.png" alt="Ciastko" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.24s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko.png" alt="Ciastko" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.31s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20drozdzowki.png" alt="Drozdzowki" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.2s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ejdzenie.png" alt="Jedzenie" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.27s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20gofry%201.png" alt="Gofry" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.34s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20jakies%20jedzneie.png" alt="Jedzenie" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.41s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20jedzenie%202.png" alt="Jedzenie" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.3s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20karmadnmopnkii.png" alt="Jedzenie" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.37s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20napoj.png" alt="Napoj" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.44s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20sniadanie.png" alt="Sniadanie" loading="lazy"></div>
-      <div class="bento-item reveal" style="transition-delay:0.51s"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20wiecej%20jedzenia.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20%20kawa.png" alt="Kawa" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20bowl.png" alt="Bowl" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastka.png" alt="Ciastka" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%202.png" alt="Ciastko" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%203.png" alt="Ciastko" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%204.png" alt="Ciastko" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko.png" alt="Ciastko" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20drozdzowki.png" alt="Drozdzowki" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ejdzenie.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20gofry%201.png" alt="Gofry" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20jakies%20jedzneie.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20jedzenie%202.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20karmadnmopnkii.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20napoj.png" alt="Napoj" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20sniadanie.png" alt="Sniadanie" loading="lazy"></div>
+      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20wiecej%20jedzenia.png" alt="Jedzenie" loading="lazy"></div>
     </div>
   </section>
 
   <!-- Menu -->
   <section class="menu-section" id="menu">
-    <h2 class="menu-heading reveal">Menu</h2>
+    <h2 class="menu-heading">Menu</h2>
     <div class="menu-accordion">
 
       <!-- ── NAPOJE ── -->
-      <div class="menu-group reveal" style="transition-delay:0.1s">
+      <div class="menu-group">
         <div class="menu-group-label-wrap">
           <span class="menu-group-label-box">Napoje</span>
         </div>
@@ -1330,7 +1457,7 @@
       </div>
 
       <!-- ── ŚNIADANIE / LUNCH ── -->
-      <div class="menu-group reveal" style="transition-delay:0.2s">
+      <div class="menu-group">
         <div class="menu-group-label-wrap">
           <span class="menu-group-label-box">Śniadanie / Lunch</span>
         </div>
@@ -1396,10 +1523,10 @@
 
   <!-- Kontakt -->
   <section class="contact-section" id="kontakt">
-    <h2 class="contact-heading reveal">Kontakt</h2>
+    <h2 class="contact-heading">Kontakt</h2>
     <div class="contact-inner">
 
-      <div class="contact-info reveal-left" style="transition-delay:0.1s">
+      <div class="contact-info">
 
         <div class="contact-block">
           <span class="contact-label">Adres</span>
@@ -1430,7 +1557,7 @@
 
       </div>
 
-      <div class="contact-map reveal-right" style="transition-delay:0.2s">
+      <div class="contact-map">
         <iframe
           src="https://maps.google.com/maps?q=Ko%C5%9Bciuszki+3%2C+35-030+Rzesz%C3%B3w&hl=pl&z=17&output=embed"
           allowfullscreen=""
@@ -1459,6 +1586,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     // ── Fit text to viewport width ──────────────────────────────
     function fitLine(el, targetRatio) {
@@ -1495,25 +1623,43 @@
                        '.hamburger', '.nav-mobile-brand']
         .map(sel => document.querySelector(sel)).filter(Boolean);
 
-      // Odkryj kontener (ukryty w CSS) i od razu ustaw litery poza ekranem
       const lineEl = document.getElementById('lineFull');
       lineEl.parentElement.style.opacity = '1';
-      gsap.set(letters, { x: -window.innerWidth * 0.75, opacity: 0 });
-      gsap.set(fadeEls, { opacity: 0 });
 
-      const tl = gsap.timeline();
+      gsap.set(letters, {
+          y: -140,
+          opacity: 0,
+          rotationX: -90,
+          filter: 'blur(10px)',
+          transformOrigin: '50% 100%',
+        });
+        gsap.set(fadeEls, { opacity: 0, y: 12 });
 
-      tl.to(letters, {
-        x: 0, opacity: 1,
-        duration: 1.1,
-        stagger: { each: 0.055, from: 'start' },
-        ease: 'power3.out',
-      })
-      .to(fadeEls, {
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power2.out',
-      }, '-=0.5');
+        const tl = gsap.timeline();
+
+        tl.to(letters, {
+          y: 0,
+          opacity: 1,
+          rotationX: 0,
+          filter: 'blur(0px)',
+          duration: 1.4,
+          stagger: { each: 0.042, from: 'start' },
+          ease: 'elastic.out(1, 0.55)',
+        })
+        .to(fadeEls, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.07,
+          ease: 'power2.out',
+        }, '-=0.5')
+        .to(lineEl, {
+          scale: 1.003,
+          duration: 3.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        }, '+=0.2');
     }
 
     async function initHero(isResize) {
@@ -1697,21 +1843,151 @@
       }, { passive: true });
     })();
 
-    // ── Scroll reveal (IntersectionObserver) ────────────────────
+    // ── GSAP ScrollTrigger animations ───────────────────────────
+    gsap.registerPlugin(ScrollTrigger);
+
+    // About — clip-path line wipes + 3D image reveal
     (function() {
-      var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-      if (!revealEls.length) return;
+      var textEls = [
+        document.querySelector('.about-label'),
+        document.querySelector('.about-heading'),
+        document.querySelector('.about-subheading'),
+        document.querySelector('.about-body'),
+        document.querySelector('.about-cta'),
+      ].filter(Boolean);
 
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
+      textEls.forEach(function(el, i) {
+        gsap.fromTo(el,
+          { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
+          { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.85,
+            delay: i * 0.1, ease: 'power3.out',
+            scrollTrigger: { trigger: '.about-left', start: 'top 78%' }
           }
-        });
-      }, { threshold: 0.12 });
+        );
+      });
 
-      revealEls.forEach(function(el) { observer.observe(el); });
+      gsap.fromTo('.about-divider',
+        { scaleX: 0, transformOrigin: 'left center', opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.9, ease: 'power2.out', delay: 0.25,
+          scrollTrigger: { trigger: '.about-left', start: 'top 75%' }
+        }
+      );
+
+      document.querySelectorAll('.about-img-wrap').forEach(function(img, i) {
+        gsap.fromTo(img,
+          { rotationY: -22, scale: 0.86, opacity: 0, transformPerspective: 900 },
+          { rotationY: 0, scale: 1, opacity: 1, duration: 1.1,
+            delay: i * 0.22, ease: 'power3.out',
+            scrollTrigger: { trigger: '.about-right', start: 'top 78%' }
+          }
+        );
+      });
+    })();
+
+    // 3D Scene — stage tilt + parallax layers + copy reveal
+    (function() {
+      var stage = document.querySelector('.scene-stage');
+      if (!stage) return;
+
+      gsap.fromTo('.scene-stage',
+        { rotateX: 22, scale: 0.9 },
+        { rotateX: 0, scale: 1, ease: 'none',
+          scrollTrigger: { trigger: '.scene-section', start: 'top bottom', end: 'center center', scrub: 1.4 }
+        }
+      );
+
+      gsap.to('.scene-layer--back',  { y: -55,  ease: 'none', scrollTrigger: { trigger: '.scene-section', start: 'top bottom', end: 'bottom top', scrub: true } });
+      gsap.to('.scene-layer--mid',   { y: -115, ease: 'none', scrollTrigger: { trigger: '.scene-section', start: 'top bottom', end: 'bottom top', scrub: true } });
+      gsap.to('.scene-layer--front', { y: -195, ease: 'none', scrollTrigger: { trigger: '.scene-section', start: 'top bottom', end: 'bottom top', scrub: true } });
+
+      gsap.fromTo('.scene-eyebrow',
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+          scrollTrigger: { trigger: '.scene-copy', start: 'top 82%' }
+        }
+      );
+
+      gsap.fromTo('.scene-title',
+        { clipPath: 'inset(0 100% 0 0)' },
+        { clipPath: 'inset(0 0% 0 0)', duration: 1.2, ease: 'power3.out', delay: 0.2,
+          scrollTrigger: { trigger: '.scene-copy', start: 'top 80%' }
+        }
+      );
+    })();
+
+    // Gallery — scale + rotationZ stagger
+    (function() {
+      var items = document.querySelectorAll('.bento-item');
+      if (!items.length) return;
+
+      gsap.fromTo('.gallery-heading',
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: '.gallery-section', start: 'top 82%' }
+        }
+      );
+
+      gsap.fromTo(items,
+        { y: 72, scale: 0.82, opacity: 0,
+          rotationZ: function(i) { return i % 2 === 0 ? -2.8 : 2.8; }
+        },
+        { y: 0, scale: 1, opacity: 1, rotationZ: 0,
+          duration: 0.88, stagger: { each: 0.055, from: 'start' }, ease: 'power3.out',
+          scrollTrigger: { trigger: '.bento-grid', start: 'top 82%' }
+        }
+      );
+    })();
+
+    // Menu — headline scrub scale + columns from opposite sides
+    (function() {
+      gsap.fromTo('.menu-heading',
+        { scale: 0.42, opacity: 0 },
+        { scale: 1, opacity: 1, ease: 'none',
+          scrollTrigger: { trigger: '.menu-section', start: 'top 88%', end: 'top 38%', scrub: 0.9 }
+        }
+      );
+
+      var groups = document.querySelectorAll('.menu-group');
+      if (groups[0]) {
+        gsap.fromTo(groups[0],
+          { x: -100, opacity: 0 },
+          { x: 0, opacity: 1, duration: 1.0, ease: 'power3.out',
+            scrollTrigger: { trigger: '.menu-accordion', start: 'top 82%' }
+          }
+        );
+      }
+      if (groups[1]) {
+        gsap.fromTo(groups[1],
+          { x: 100, opacity: 0 },
+          { x: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.12,
+            scrollTrigger: { trigger: '.menu-accordion', start: 'top 82%' }
+          }
+        );
+      }
+    })();
+
+    // Contact — heading clip-path + info fade + map 3D lay-flat
+    (function() {
+      gsap.fromTo('.contact-heading',
+        { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
+        { clipPath: 'inset(0 0% 0 0)', duration: 1.1, ease: 'power3.out',
+          scrollTrigger: { trigger: '.contact-section', start: 'top 82%' }
+        }
+      );
+
+      gsap.fromTo('.contact-info',
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, ease: 'power2.out', delay: 0.2,
+          scrollTrigger: { trigger: '.contact-inner', start: 'top 82%' }
+        }
+      );
+
+      gsap.fromTo('.contact-map',
+        { rotationX: 12, scale: 0.9, opacity: 0, transformPerspective: 1000 },
+        { rotationX: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'power3.out', delay: 0.3,
+          scrollTrigger: { trigger: '.contact-inner', start: 'top 78%' }
+        }
+      );
     })();
 
     // ── Nav anchor smooth-scroll with fixed-header offset ───────
