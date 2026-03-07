@@ -162,6 +162,7 @@
       position: absolute;
       top: 22px;
       right: 24px;
+      z-index: 10;
       background: none;
       border: none;
       cursor: pointer;
@@ -212,6 +213,7 @@
     .nav-overlay.is-open .nav-panel--main .nav-overlay-link:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.42s; }
     .nav-overlay.is-open .nav-panel--main .nav-overlay-link:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.52s; }
     .nav-overlay.is-open .nav-panel--main .nav-overlay-link:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.62s; }
+    .nav-overlay.is-open .nav-panel--main .nav-overlay-link:nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 0.72s; }
 
     .nav-overlay-link:hover  { color: rgba(255,255,255,0.5); }
     .nav-overlay-link:active { color: rgba(255,255,255,0.3); }
@@ -940,6 +942,84 @@
       flex-shrink: 0;
     }
 
+    /* ─── OPINIE ────────────────────────────────────────────── */
+    .reviews-section {
+      background: #0a0a0a;
+      padding: 80px 40px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .reviews-heading {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: clamp(36px, 5vw, 72px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 56px;
+      text-align: center;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 960px;
+      width: 100%;
+    }
+
+    .review-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 4px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .review-stars {
+      display: flex;
+      gap: 3px;
+      color: #c8a96e;
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+
+    .review-text {
+      font-family: 'freight-text-pro', Georgia, serif;
+      font-size: 15px;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.72);
+      flex: 1;
+    }
+
+    .review-author {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+    }
+
+    @media (max-width: 700px) {
+      .reviews-section {
+        padding: 60px 20px 60px;
+      }
+      .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .review-card {
+        padding: 24px 20px;
+      }
+    }
+
     /* ─── CONTACT ───────────────────────────────────────────── */
     .contact-section {
       background: #0a0a0a;
@@ -1383,9 +1463,10 @@
       <!-- Panel 1: główne linki -->
       <div class="nav-panel nav-panel--main">
         <nav class="nav-overlay-links">
+          <a href="#o-nas" class="nav-overlay-link">O nas</a>
           <button class="nav-overlay-link nav-overlay-link--has-sub" id="navMenuBtn">Menu<span class="nav-overlay-arrow">›</span></button>
           <a href="#galeria" class="nav-overlay-link">Galeria</a>
-          <a href="#o-nas" class="nav-overlay-link">O nas</a>
+          <a href="#opinie" class="nav-overlay-link">Opinie</a>
           <a href="#kontakt" class="nav-overlay-link">Kontakt</a>
           <a href="#" class="nav-overlay-logo-link">
             <img src="kontekst_do_strony/logo%20kawa%20rzeszowska%20bez%20napisu.png" alt="Kawa Rzeszowska" class="nav-overlay-logo">
@@ -1417,6 +1498,8 @@
       <span class="nav-mobile-brand">Kawa Rzeszowska</span>
 
       <div class="nav-group">
+        <a href="#o-nas" class="nav-link">O nas</a>
+        <div class="nav-divider"></div>
         <a href="#menu" class="nav-link">Menu</a>
         <div class="nav-divider"></div>
         <a href="#galeria" class="nav-link">Galeria</a>
@@ -1430,7 +1513,7 @@
       </button>
 
       <div class="nav-group">
-        <a href="#o-nas" class="nav-link">O nas</a>
+        <a href="#opinie" class="nav-link">Opinie</a>
         <div class="nav-divider"></div>
         <a href="#kontakt" class="nav-link">Kontakt</a>
       </div>
@@ -1665,6 +1748,38 @@
       <div class="menu-footer">
         <p>Mleko roślinne +3 zł &nbsp;·&nbsp; Mleko bez laktozy +1 zł &nbsp;·&nbsp; Syrop +3 zł &nbsp;·&nbsp; Dodatkowy składnik +8 zł</p>
         <p>Kuchnia otwarta do godz. 15:00 lub do wyczerpania zapasów. Zamówienia przyjmujemy przy barze.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Opinie -->
+  <section class="reviews-section" id="opinie">
+    <h2 class="reviews-heading">Opinie</h2>
+    <div class="reviews-grid">
+
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Byłam już wiele razy, zatem przyszedł czas na opinie ☺️ Jedzenie top, smakowała mi każda pozycja, którą zamawiałam. Kawa pyszna świetnej jakości. Matcha mimo, że nie jesteście matcharnia to dla mnie absolutny top w całym Rzeszowie, kolor, smak no idealna a ta różana to moje guilty pleasure! 💚 Wasza miejscówka na bulwarach też godna polecenia!</p>
+        <span class="review-author">Klaudia</span>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Super miejsce. Jedzenie bardzo smaczne — polecam jajka po turecku, są bardzo czosnkowe i lekko kwaśne. Pychotka. Do tego chrupiąca pajda chleba. Smaczne herbatki, duży wybór. Miejsce klimatyczne, czyste. Obsługa bardzo miła. Polecam serdecznie i pozdrawiam.</p>
+        <span class="review-author">Adam</span>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Kawa Rzeszowska! Jest pysznie, wspaniale, wyśmienicie. Już rozumiem dlaczego nie jest łatwo dorwać u Was rano wolny stolik. Kilka osób czekało przed drzwiami jeszcze przed otwarciem… Jajka z harrisą z tymi dwiema wielkimi pajdami chleba — niesamowite. Różana matcha była rewelacyjna. Od dziś moja ulubiona wariacja z matchą w roli głównej. A do kawy w domu wzięłam na wynos ciasteczko red velvet. Pycha!</p>
+        <span class="review-author">Aneta D</span>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Pyszny, aromatyczny chleb a do tego dobrej jakości składniki i to na bogato :) Wszystko naprawdę ze smakiem skomponowane. Herbata też w słusznej, wielkiej porcji. Polecam :)</p>
+        <span class="review-author">Katarzyna Durawa</span>
       </div>
 
     </div>
