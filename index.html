@@ -1762,22 +1762,6 @@
       if (e.key === 'Escape' && isOpen) closeMenu();
     });
 
-    // ── Scroll-driven headline parallax ─────────────────────────
-    // Headline "floats" in place while page scrolls — logo rises and passes over it
-    const headlineWrap = document.querySelector('.headline-wrap');
-    const heroEl = document.querySelector('.hero');
-
-    function onScroll() {
-      const scrollY = window.scrollY;
-      const heroHeight = heroEl.offsetHeight;
-      // Only apply within the hero scroll range
-      const clampedY = Math.min(scrollY, heroHeight);
-      // translateY = scrollY cancels the scroll → headline stays fixed in viewport
-      headlineWrap.style.transform = `translateY(${clampedY}px)`;
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
 
     // ── Lightbox z swipe ─────────────────────────────────────────
     const lightbox      = document.getElementById('lightbox');
