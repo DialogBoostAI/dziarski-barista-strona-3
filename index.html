@@ -55,6 +55,13 @@
       align-items: center;
       justify-content: space-between;
       padding: 28px 48px;
+      background: transparent;
+      transition: background 0.3s ease, padding 0.3s ease;
+    }
+    .nav.scrolled {
+      background: #000;
+      padding-top: 16px;
+      padding-bottom: 16px;
     }
 
     .nav-group {
@@ -1762,6 +1769,16 @@
       if (e.key === 'Escape' && isOpen) closeMenu();
     });
 
+
+    // ── Nav scroll background ────────────────────────────────────
+    (function() {
+      var nav = document.querySelector('.nav');
+      function updateNav() {
+        nav.classList.toggle('scrolled', window.scrollY > 20);
+      }
+      window.addEventListener('scroll', updateNav, { passive: true });
+      updateNav();
+    })();
 
     // ── Lightbox z swipe ─────────────────────────────────────────
     const lightbox      = document.getElementById('lightbox');
