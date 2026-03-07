@@ -1135,6 +1135,114 @@
       opacity: 1;
     }
 
+    /* ─── CONTACT FORM ──────────────────────────────────────── */
+    .contact-form-wrap {
+      width: 100%;
+      max-width: 1100px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 60px 0 80px;
+    }
+
+    .contact-form-heading {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 32px;
+    }
+
+    .contact-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .contact-form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-form-field--full {
+      grid-column: 1 / -1;
+    }
+
+    .contact-form label {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      padding: 14px 16px;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+    }
+
+    .contact-form textarea {
+      height: 140px;
+      resize: vertical;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: rgba(255,255,255,0.2);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .contact-form-submit {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 8px;
+    }
+
+    .contact-form-btn {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #000;
+      background: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 14px 36px;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+      -webkit-appearance: none;
+    }
+
+    .contact-form-btn:hover  { opacity: 0.85; }
+    .contact-form-btn:active { opacity: 0.6; transform: scale(0.98); }
+
+    @media (max-width: 700px) {
+      .contact-form {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .contact-footer-bar {
       width: 100%;
       max-width: 1100px;
@@ -1844,6 +1952,31 @@
         ></iframe>
       </div>
 
+    </div>
+
+    <div class="contact-form-wrap">
+      <p class="contact-form-heading">Napisz do nas</p>
+      <form class="contact-form" action="https://formspree.io/f/placeholder" method="POST" novalidate>
+        <div class="contact-form-field">
+          <label for="cf-name">Imię i nazwisko</label>
+          <input type="text" id="cf-name" name="name" placeholder="Jan Kowalski" required>
+        </div>
+        <div class="contact-form-field">
+          <label for="cf-email">E-mail</label>
+          <input type="email" id="cf-email" name="email" placeholder="jan@example.com" required>
+        </div>
+        <div class="contact-form-field contact-form-field--full">
+          <label for="cf-subject">Temat</label>
+          <input type="text" id="cf-subject" name="subject" placeholder="W czym możemy pomóc?">
+        </div>
+        <div class="contact-form-field contact-form-field--full">
+          <label for="cf-message">Wiadomość</label>
+          <textarea id="cf-message" name="message" placeholder="Twoja wiadomość…" required></textarea>
+        </div>
+        <div class="contact-form-submit">
+          <button type="submit" class="contact-form-btn">Wyślij wiadomość</button>
+        </div>
+      </form>
     </div>
 
     <div class="contact-footer-bar">
