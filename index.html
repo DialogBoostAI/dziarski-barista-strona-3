@@ -1620,6 +1620,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
+    // ── Ukryj elementy hero natychmiast (sync) ──────────────────
+    ['.nav', '.nav-border', '.hero-logo-wrap', '.hero-tagline',
+     '.hamburger', '.nav-mobile-brand'].forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (el) el.style.opacity = '0';
+    });
+
     // ── Fit text to viewport width ──────────────────────────────
     function fitLine(el, targetRatio) {
       const target = window.innerWidth * (targetRatio || 0.96);
