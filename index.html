@@ -138,6 +138,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       opacity: 0;
       pointer-events: none;
       transform: translateY(-100%);
@@ -207,10 +208,10 @@
                   color 0.2s ease;
     }
 
-    .nav-overlay.is-open .nav-overlay-link:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.32s; }
-    .nav-overlay.is-open .nav-overlay-link:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.42s; }
-    .nav-overlay.is-open .nav-overlay-link:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.52s; }
-    .nav-overlay.is-open .nav-overlay-link:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.62s; }
+    .nav-overlay.is-open .nav-panel--main .nav-overlay-link:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.32s; }
+    .nav-overlay.is-open .nav-panel--main .nav-overlay-link:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.42s; }
+    .nav-overlay.is-open .nav-panel--main .nav-overlay-link:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.52s; }
+    .nav-overlay.is-open .nav-panel--main .nav-overlay-link:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.62s; }
 
     .nav-overlay-link:hover  { color: rgba(255,255,255,0.5); }
     .nav-overlay-link:active { color: rgba(255,255,255,0.3); }
@@ -247,6 +248,95 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.25);
+    }
+
+    /* ─── NAV PANELS SLIDER ─────────────────────────────────── */
+    .nav-panels {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      width: 200%;
+      will-change: transform;
+      transform: translateX(0);
+      transition: transform 0.42s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .nav-overlay.in-sub .nav-panels {
+      transform: translateX(-50%);
+    }
+
+    .nav-panel {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* back button */
+    .nav-panel-back {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.45);
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 36px;
+      padding: 0;
+      opacity: 0;
+      transform: translateX(-14px);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.215, 0.61, 0.355, 1),
+                  color 0.2s ease;
+    }
+    .nav-overlay.in-sub .nav-panel-back {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0.15s;
+    }
+    .nav-panel-back:hover  { color: #fff; transform: translateX(-5px); }
+    .nav-panel-back:active { color: rgba(255,255,255,0.3); }
+
+    /* button reset for menu btn */
+    .nav-overlay-link--has-sub {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* arrow on menu btn */
+    .nav-overlay-arrow {
+      font-size: 0.65em;
+      opacity: 0.4;
+      display: inline-block;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      margin-left: 6px;
+    }
+    .nav-overlay-link--has-sub:hover .nav-overlay-arrow,
+    .nav-overlay-link--has-sub:focus-visible .nav-overlay-arrow {
+      transform: translateX(5px);
+      opacity: 0.8;
+    }
+
+    /* sub-panel link stagger (triggers when in-sub) */
+    .nav-overlay.in-sub .nav-panel--sub .nav-overlay-link:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+    .nav-overlay.in-sub .nav-panel--sub .nav-overlay-link:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
+    .nav-overlay.in-sub .nav-panel--sub .nav-overlay-link:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
+    .nav-overlay.in-sub .nav-panel--sub .nav-overlay-link:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.5s; }
+
+    /* reset sub links when leaving sub (snap back before next open) */
+    .nav-panel--sub .nav-overlay-link {
+      opacity: 0;
+      transform: translateY(20px);
     }
 
     /* ─── HEADLINE ─────────────────────────────────────────── */
@@ -1286,15 +1376,36 @@
         <line x1="19" y1="3" x2="3" y2="19"/>
       </svg>
     </button>
-    <nav class="nav-overlay-links">
-      <a href="#menu" class="nav-overlay-link">Menu</a>
-      <a href="#galeria" class="nav-overlay-link">Galeria</a>
-      <a href="#o-nas" class="nav-overlay-link">O nas</a>
-      <a href="#kontakt" class="nav-overlay-link">Kontakt</a>
-      <a href="#" class="nav-overlay-logo-link">
-        <img src="kontekst_do_strony/logo%20kawa%20rzeszowska%20bez%20napisu.png" alt="Kawa Rzeszowska" class="nav-overlay-logo">
-      </a>
-    </nav>
+
+    <!-- Panels slider -->
+    <div class="nav-panels" id="navPanels">
+
+      <!-- Panel 1: główne linki -->
+      <div class="nav-panel nav-panel--main">
+        <nav class="nav-overlay-links">
+          <button class="nav-overlay-link nav-overlay-link--has-sub" id="navMenuBtn">Menu<span class="nav-overlay-arrow">›</span></button>
+          <a href="#galeria" class="nav-overlay-link">Galeria</a>
+          <a href="#o-nas" class="nav-overlay-link">O nas</a>
+          <a href="#kontakt" class="nav-overlay-link">Kontakt</a>
+          <a href="#" class="nav-overlay-logo-link">
+            <img src="kontekst_do_strony/logo%20kawa%20rzeszowska%20bez%20napisu.png" alt="Kawa Rzeszowska" class="nav-overlay-logo">
+          </a>
+        </nav>
+      </div>
+
+      <!-- Panel 2: podmenu Menu -->
+      <div class="nav-panel nav-panel--sub" id="navSubPanel">
+        <button class="nav-panel-back" id="navBack" aria-label="Wróć do menu">
+          <span>‹</span> Menu
+        </button>
+        <nav class="nav-overlay-links">
+          <a href="#menu" class="nav-overlay-link">Napoje</a>
+          <a href="#menu" class="nav-overlay-link">Śniadanie</a>
+        </nav>
+      </div>
+
+    </div>
+
     <span class="nav-overlay-label">Kawa Rzeszowska</span>
   </div>
 
@@ -1751,6 +1862,7 @@
       overlay.addEventListener('transitionend', function handler(e) {
         if (e.propertyName === 'transform') {
           overlay.classList.remove('is-closing');
+          overlay.classList.remove('in-sub');
           overlay.removeEventListener('transitionend', handler);
         }
       });
@@ -1759,8 +1871,22 @@
     hamburger.addEventListener('click', () => isOpen ? closeMenu() : openMenu());
     navClose.addEventListener('click', closeMenu);
 
-    // Close on overlay link click
-    overlay.querySelectorAll('.nav-overlay-link').forEach(link => {
+    // Panel navigation
+    const navMenuBtn = document.getElementById('navMenuBtn');
+    const navBack    = document.getElementById('navBack');
+
+    navMenuBtn.addEventListener('click', () => {
+      overlay.classList.add('in-sub');
+    });
+    navBack.addEventListener('click', () => {
+      overlay.classList.remove('in-sub');
+    });
+
+    // Close on overlay link click (only non-panel-nav links)
+    overlay.querySelectorAll('.nav-panel--main .nav-overlay-link:not(.nav-overlay-link--has-sub)').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+    overlay.querySelectorAll('.nav-panel--sub .nav-overlay-link').forEach(link => {
       link.addEventListener('click', closeMenu);
     });
     overlay.querySelector('.nav-overlay-logo-link').addEventListener('click', closeMenu);
