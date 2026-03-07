@@ -203,6 +203,8 @@
       text-transform: uppercase;
       color: #fff;
       text-decoration: none;
+      text-align: center;
+      display: block;
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.215, 0.61, 0.355, 1),
@@ -307,12 +309,18 @@
     .nav-panel-back:hover  { color: #fff; transform: translateX(-5px); }
     .nav-panel-back:active { color: rgba(255,255,255,0.3); }
 
-    /* button reset for menu btn */
+    /* button reset for menu btn — Mobile Safari nie dziedziczy fontu na <button> */
     .nav-overlay-link--has-sub {
       background: none;
       border: none;
       cursor: pointer;
       padding: 0;
+      font-family: 'brandon-grotesque', sans-serif;
+      font-size: clamp(28px, 8vw, 48px);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      -webkit-appearance: none;
     }
 
     /* arrow on menu btn */
