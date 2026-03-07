@@ -26,6 +26,7 @@
 
     body {
       background: #000;
+      overflow-x: hidden;
     }
 
     /* ─── HERO ─────────────────────────────────────────────── */
@@ -1698,11 +1699,11 @@
       await document.fonts.ready;
       const lineEl = document.getElementById('lineFull');
       if (!heroLetters) {
-        fitLine(lineEl, 0.96);
+        fitLine(lineEl, 0.91);
         heroLetters = splitText(lineEl);
         if (!isResize) heroEntranceAnim(heroLetters);
       } else {
-        fitLine(lineEl, 0.96);
+        fitLine(lineEl, 0.91);
       }
     }
 
