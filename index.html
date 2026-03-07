@@ -1656,7 +1656,6 @@
         .map(sel => document.querySelector(sel)).filter(Boolean);
 
       const lineEl = document.getElementById('lineFull');
-      lineEl.parentElement.style.opacity = '1';
 
       gsap.set(letters, {
           y: -140,
@@ -1665,6 +1664,7 @@
           filter: 'blur(10px)',
           transformOrigin: '50% 100%',
         });
+      lineEl.parentElement.style.opacity = '1';
         gsap.set(fadeEls, { opacity: 0, y: 12 });
 
         const tl = gsap.timeline();
