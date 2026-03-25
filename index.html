@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kawa Rzeszowska</title>
+  <title>Dziarski Barista</title>
   <link rel="stylesheet" href="https://use.typekit.net/kei4dah.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -40,6 +40,19 @@
       height: 100vh;
       background: #000;
       overflow: hidden;
+    }
+
+    /* Grain overlay */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.055;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 180px 180px;
     }
 
     /* ─── BELOW FOLD ────────────────────────────────────────── */
@@ -246,7 +259,6 @@
     .nav-overlay-logo {
       width: 72px;
       display: block;
-      filter: brightness(0) invert(1);
     }
 
     .nav-overlay-label {
@@ -417,11 +429,15 @@
     /* ─── LOGO ─────────────────────────────────────────────── */
     .hero-logo-wrap {
       position: absolute;
-      bottom: 5%;
+      bottom: calc(5% + 50px);
       left: 50%;
       transform: translateX(-50%);
       z-index: 20;
-      width: clamp(360px, 36vw, 600px);
+      width: clamp(288px, 28.8vw, 480px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
     }
 
     .hero-logo-wrap img,
@@ -430,15 +446,59 @@
       display: block;
     }
 
+    .hero-menu-btn {
+      font-family: 'brandon-grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      padding: 13px 36px;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.35s ease, border-color 0.35s ease;
+      white-space: nowrap;
+    }
+
+    .hero-menu-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .hero-menu-btn:hover {
+      color: #000;
+      border-color: #fff;
+    }
+
+    .hero-menu-btn:hover::before {
+      transform: scaleX(1);
+    }
+
+    .hero-menu-btn:active {
+      opacity: 0.7;
+    }
+
+    .hero-menu-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
     /* ─── HAIRLINE BORDER BELOW NAV ────────────────────────── */
     .nav-border {
-      position: fixed;
-      top: 72px;
+      position: absolute;
+      bottom: 0;
       left: 48px;
       right: 48px;
-      height: 1px;
+      height: 4px;
       background: rgba(255,255,255,0.1);
-      z-index: 25;
     }
 
     /* ─── NAV BRAND (mobile only) ──────────────────────────── */
@@ -1431,6 +1491,10 @@
         bottom: 20%;
       }
 
+      .hero-menu-btn {
+        display: none;
+      }
+
       .hero-tagline {
         display: block;
       }
@@ -1482,6 +1546,10 @@
       .menu-group-label-wrap {
         width: auto;
         padding-top: 0;
+      }
+
+      .menu-group-items {
+        width: 100%;
       }
 
       .acc-header {
@@ -1591,13 +1659,13 @@
       <!-- Panel 1: główne linki -->
       <div class="nav-panel nav-panel--main">
         <nav class="nav-overlay-links">
-          <button class="nav-overlay-link nav-overlay-link--has-sub" id="navMenuBtn">Menu</button>
+          <a href="#menu" class="nav-overlay-link" id="navMenuBtn">Menu</a>
           <a href="#galeria" class="nav-overlay-link">Galeria</a>
           <a href="#opinie" class="nav-overlay-link">Opinie</a>
           <a href="#o-nas" class="nav-overlay-link">O nas</a>
           <a href="#kontakt" class="nav-overlay-link">Kontakt</a>
           <a href="#" class="nav-overlay-logo-link">
-            <img src="kontekst_do_strony/logo%20kawa%20rzeszowska%20bez%20napisu.png" alt="Kawa Rzeszowska" class="nav-overlay-logo">
+            <img src="dziarski_barista_zdjecia/dziarski%20barista%20ostateczne%20logo.png" alt="Dziarski Barista" class="nav-overlay-logo">
           </a>
         </nav>
       </div>
@@ -1609,13 +1677,13 @@
         </button>
         <nav class="nav-overlay-links">
           <a href="#menu-napoje" class="nav-overlay-link">Napoje</a>
-          <a href="#menu-sniadanie" class="nav-overlay-link">Śniadania / Lunch</a>
+          <a href="#menu-kanapki" class="nav-overlay-link">Kanapki</a>
         </nav>
       </div>
 
     </div>
 
-    <span class="nav-overlay-label">Kawa Rzeszowska</span>
+    <span class="nav-overlay-label">Dziarski Barista</span>
   </div>
 
   <section class="hero">
@@ -1623,7 +1691,7 @@
     <!-- Nav -->
     <nav class="nav">
       <!-- Brand name visible on mobile -->
-      <span class="nav-mobile-brand">Kawa Rzeszowska</span>
+      <span class="nav-mobile-brand">Dziarski Barista</span>
 
       <div class="nav-group">
         <a href="#menu" class="nav-link">Menu</a>
@@ -1645,34 +1713,34 @@
         <div class="nav-divider"></div>
         <a href="#kontakt" class="nav-link">Kontakt</a>
       </div>
+      <div class="nav-border"></div>
     </nav>
-
-    <div class="nav-border"></div>
 
     <!-- Headline -->
     <div class="headline-wrap">
       <div class="headline-inner">
-        <span class="headline-line" id="lineFull">Kawa Rzeszowska</span>
+        <span class="headline-line" id="lineFull">Dziarski Barista</span>
       </div>
 
       <!-- Annotation flanking text -->
       <div class="flank-row">
         <div class="flank-text">
-          Kawa z charakterem.<br>Smak Rzeszowa.
+          Kawa z charakterem.<br>Matejki 8a, Rzeszów.
         </div>
         <div class="flank-text flank-text--right">
-          Serce<br>Starego Miasta.
+          Serce<br>Rzeszowa.
         </div>
       </div>
     </div>
 
     <!-- Logo -->
     <div class="hero-logo-wrap">
-      <img src="kontekst_do_strony/logo%20kawa%20rzeszowska%20bez%20napisu.png" alt="Kawa Rzeszowska">
+      <img src="dziarski_barista_zdjecia/dziarski%20barista%20ostateczne%20logo.png" alt="Dziarski Barista">
+      <a href="#menu" class="hero-menu-btn"><span>Sprawdź Menu</span></a>
     </div>
 
     <!-- Mobile tagline below video -->
-    <p class="hero-tagline">Kawa z charakterem.<br>Smak Rzeszowa.</p>
+    <p class="hero-tagline">Kawa z charakterem.<br>Matejki 8a, Rzeszów.</p>
 
   </section>
 
@@ -1683,44 +1751,44 @@
       <h2 class="about-heading">Poznaj naszą<br>historię</h2>
       <p class="about-subheading">Od 10 lat w sercu Rzeszowa.</p>
       <div class="about-divider"></div>
-      <p class="about-body">Znajdziesz nas przy ul. Kościuszki 3. Serwujemy kawę, świeże śniadania, brioszki, tosty i domowe lemoniady. Mamy też kącik dla najmłodszych — bo dobra kawa smakuje lepiej gdy cała rodzina jest razem.</p>
+      <p class="about-body">Znajdziesz nas przy ul. Matejki 8a w Rzeszowie. Serwujemy kawę z pasją — espresso z ekspresu, alternatywne przelewowe i autorskie napoje na zimno. Do tego prawilne kanapki i domowe specjały: kombuchy, ginger beer, tepache i lemoniady.</p>
       <a href="#kontakt" class="about-cta">Znajdź nas →</a>
     </div>
     <div class="about-right">
       <div class="about-img-wrap">
-        <img class="about-img" src="kontekst_do_strony/kawa%20rzeszowska%20wnetrze.png" alt="Wnętrze Kawa Rzeszowska">
+        <img class="about-img" src="dziarski_barista_zdjecia/dziarski%20barista%20wnetrze%201.png" alt="Wnętrze Dziarski Barista">
       </div>
       <div class="about-img-wrap">
-        <img class="about-img" src="kontekst_do_strony/kawa%20rzeszowska%20wnetrze%202.png" alt="Wnętrze Kawa Rzeszowska">
+        <img class="about-img" src="dziarski_barista_zdjecia/dziarski%20barista%20wnetrze%202.png" alt="Wnętrze Dziarski Barista">
       </div>
     </div>
   </section>
 
   <!-- Scrolling Marquee Strip -->
   <div class="marquee-strip" aria-hidden="true" role="presentation">
-    <div class="marquee-track" id="marqueeTrack"><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span><span class="mq-item">KAWA RZESZOWSKA</span><span class="mq-sep">✦</span></div>
+    <div class="marquee-track" id="marqueeTrack"><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span><span class="mq-item">DZIARSKI BARISTA</span><span class="mq-sep">✦</span></div>
   </div>
 
   <!-- Gallery -->
   <section class="gallery-section" id="galeria">
     <h2 class="gallery-heading">Galeria</h2>
     <div class="bento-grid">
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20%20kawa.png" alt="Kawa" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20bowl.png" alt="Bowl" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastka.png" alt="Ciastka" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%202.png" alt="Ciastko" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%203.png" alt="Ciastko" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko%204.png" alt="Ciastko" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ciastko.png" alt="Ciastko" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20drozdzowki.png" alt="Drozdzowki" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20ejdzenie.png" alt="Jedzenie" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20gofry%201.png" alt="Gofry" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20jakies%20jedzneie.png" alt="Jedzenie" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20jedzenie%202.png" alt="Jedzenie" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20karmadnmopnkii.png" alt="Jedzenie" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20napoj.png" alt="Napoj" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20sniadanie.png" alt="Sniadanie" loading="lazy"></div>
-      <div class="bento-item"><img src="zdjecia_jedzenia/kawa%20rzeszowska%20wiecej%20jedzenia.png" alt="Jedzenie" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/kawa%20dziarski%202.png" alt="Kawa" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/kawa%20dziarski%203.png" alt="Kawa" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/kawa%20dziarski%204.png" alt="Kawa" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/kawa%20dziarski%205.png" alt="Kawa" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/kawa%20dziraski%201.png" alt="Kawa" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/lanie%20kawy%20dziarski.png" alt="Lanie kawy" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/jedzenie%20dziarski%201.png" alt="Kanapka" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/jedzenie%20dziarski%202.png" alt="Kanapka" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/jedzenie%20dziarski%203.png" alt="Kanapka" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/dziarski%20barista%20wnetrze%201.png" alt="Wnętrze" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/dziarski%20barista%20wnetrze%202.png" alt="Wnętrze" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/dziarski%20barista%20wnetrze%203.png" alt="Wnętrze" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/dziarski%20barista%20wnetrze%204.png" alt="Wnętrze" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/dziarski%20barista%20wnetrze%206.png" alt="Wnętrze" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/wnetrze_kawa%203.png" alt="Wnętrze" loading="lazy"></div>
+      <div class="bento-item"><img src="dziarski_barista_zdjecia/dziarski%20barista%205.png" alt="Dziarski Barista" loading="lazy"></div>
     </div>
   </section>
 
@@ -1737,145 +1805,84 @@
         <div class="menu-group-items">
 
           <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Kawa</span><span class="acc-icon">+</span></button>
+            <button class="acc-header" aria-expanded="false"><span>Ekspres</span><span class="acc-icon">+</span></button>
             <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Espresso</span></div><span class="acc-row-price">7 / 9 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Americano</span></div><span class="acc-row-price">10 / 12 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Flat White</span></div><span class="acc-row-price">13 / 14 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Latte</span></div><span class="acc-row-price">12 / 14 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Cappuccino</span></div><span class="acc-row-price">11 / 14 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Przelew dnia</span></div><span class="acc-row-price">10 / 12 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Aeropress</span></div><span class="acc-row-price">14 / 15 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Chemex</span></div><span class="acc-row-price">22 / 25 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Spiced Honey Flat White</span></div><span class="acc-row-price">15 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Pumpkin Spice Latte</span></div><span class="acc-row-price">18 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Piernikowe Latte</span></div><span class="acc-row-price">17 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Chai Latte</span></div><span class="acc-row-price">17 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Mocha</span></div><span class="acc-row-price">17 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Blackberry Mocha</span></div><span class="acc-row-price">19 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Doppio espresso</span></div><span class="acc-row-price">8 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Flat white</span></div><span class="acc-row-price">10 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Latte</span></div><span class="acc-row-price">10 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Mocha</span></div><span class="acc-row-price">12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Extra shot</span><span class="acc-row-desc">dodatek</span></div><span class="acc-row-price">+ 2 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Decaf</span><span class="acc-row-desc">dodatek</span></div><span class="acc-row-price">+ 2 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Syrop</span><span class="acc-row-desc">dodatek</span></div><span class="acc-row-price">+ 2 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Owies</span><span class="acc-row-desc">dodatek</span></div><span class="acc-row-price">+ 2 zł</span></div>
             </div></div>
           </div>
 
           <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Herbata</span><span class="acc-icon">+</span></button>
+            <button class="acc-header" aria-expanded="false"><span>Alternatywy</span><span class="acc-icon">+</span></button>
             <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Herbata</span><span class="acc-row-desc">earl grey / assam / piękna / jaśminowa / owocowa / ziołowa</span></div><span class="acc-row-price">12 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Herbata rozgrzewająca</span><span class="acc-row-desc">syrop malinowy, imbir, goździki, cynamon, kardamon, pomarańcza, jagody goji</span></div><span class="acc-row-price">18 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Napar</span><span class="acc-row-desc">Cytryna-Imbir / Pomarańcza-Rozmaryn / Mango-Mięta</span></div><span class="acc-row-price">16 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Przelew dnia</span><span class="acc-row-desc">200 ml / 300 ml</span></div><span class="acc-row-price">9 / 11 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Kalita</span><span class="acc-row-desc">300 ml</span></div><span class="acc-row-price">13 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Chemex</span><span class="acc-row-desc">500 ml</span></div><span class="acc-row-price">22 zł</span></div>
             </div></div>
           </div>
 
           <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Matcha</span><span class="acc-icon">+</span></button>
+            <button class="acc-header" aria-expanded="false"><span>Na zimno</span><span class="acc-icon">+</span></button>
             <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Matcha Latte</span></div><span class="acc-row-price">15 / 16 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Różana Matcha Latte</span></div><span class="acc-row-price">18 / 19 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Korzenna Matcha Latte</span></div><span class="acc-row-price">18 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Blackberry White Matcha</span></div><span class="acc-row-price">19 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Czekolada</span><span class="acc-row-desc">Klasyczna / Chili</span></div><span class="acc-row-price">16 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Freddo cappuccino</span></div><span class="acc-row-price">13 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Iced latte</span></div><span class="acc-row-price">13 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Shakerato</span></div><span class="acc-row-price">13 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Freddo espresso</span></div><span class="acc-row-price">12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Espresso tonic</span></div><span class="acc-row-price">13 zł</span></div>
             </div></div>
           </div>
 
           <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Inne Napoje</span><span class="acc-icon">+</span></button>
+            <button class="acc-header" aria-expanded="false"><span>Nie kawa</span><span class="acc-icon">+</span></button>
             <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Iced Latte / Flat</span><span class="acc-row-desc">syrop +3 zł</span></div><span class="acc-row-price">15 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Espresso Tonic</span></div><span class="acc-row-price">16 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Espresso Orange</span></div><span class="acc-row-price">17 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Iced Americano</span></div><span class="acc-row-price">13 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Przelew na lodzie</span></div><span class="acc-row-price">13 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Nitro Cold Brew</span></div><span class="acc-row-price">15 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Iced Matcha Latte</span></div><span class="acc-row-price">16 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Różana Iced Matcha Latte</span></div><span class="acc-row-price">19 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Truskawkowa Iced Matcha Latte</span></div><span class="acc-row-price">19 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Mango Iced Matcha Latte</span></div><span class="acc-row-price">19 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Matcha Tonic / Orange</span></div><span class="acc-row-price">17 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Lemoniady</span><span class="acc-row-desc">Cytryna-Mięta / Róża-Hibiskus / Truskawka-Jaśmin (dodaj matchę +5 zł)</span></div><span class="acc-row-price">17 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Mrożone herbaty</span><span class="acc-row-desc">Malina-Rozmaryn / Limonka-Jaśmin / Brzoskwinia-Hibiskus</span></div><span class="acc-row-price">16 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Soki świeżo wyciskane 350ml</span><span class="acc-row-desc">Pomarańcza / Grejpfrut / Mix</span></div><span class="acc-row-price">18 / 20 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Herbata</span></div><span class="acc-row-price">10 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Gorąca czekolada</span></div><span class="acc-row-price">12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Cascara</span></div><span class="acc-row-price">10 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Sok</span></div><span class="acc-row-price">12 zł</span></div>
             </div></div>
           </div>
 
           <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Smoothie</span><span class="acc-icon">+</span></button>
+            <button class="acc-header" aria-expanded="false"><span>Domowe specjały</span><span class="acc-icon">+</span></button>
             <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Marakuja-Mango-Banan</span></div><span class="acc-row-price">20 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Smoczy Owoc-Truskawka-Banan</span></div><span class="acc-row-price">20 zł</span></div>
-            </div></div>
-          </div>
-
-          <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Coffee Cocktails Menu</span><span class="acc-icon">+</span></button>
-            <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Ish Gin &amp; Tonic</span></div><span class="acc-row-price">18 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Ish Spritz</span></div><span class="acc-row-price">18 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Piwo</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Kaffe kombucha</span></div><span class="acc-row-price">12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">CBD kombucha</span></div><span class="acc-row-price">12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Ginger beer</span></div><span class="acc-row-price">12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Tepache</span></div><span class="acc-row-price">12 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Lemoniada</span></div><span class="acc-row-price">9 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Mrożona herbata</span></div><span class="acc-row-price">9 zł</span></div>
             </div></div>
           </div>
 
         </div>
       </div>
 
-      <!-- ── ŚNIADANIE / LUNCH ── -->
-      <div class="menu-group" id="menu-sniadanie">
+      <!-- ── KANAPKI ── -->
+      <div class="menu-group" id="menu-kanapki">
         <div class="menu-group-label-wrap">
-          <span class="menu-group-label-box">Śniadanie / Lunch</span>
+          <span class="menu-group-label-box">Kanapki</span>
         </div>
         <div class="menu-group-items">
 
           <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>French Toasts</span><span class="acc-icon">+</span></button>
+            <button class="acc-header" aria-expanded="false"><span>Prawilna Kanapka</span><span class="acc-icon">+</span></button>
             <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Hot Honey Halloumi Briosz</span><span class="acc-row-desc">grillowana brioszka, ubijana ricotta, grillowane halloumi, rukola, pikantny miód na ciepło, pestki granatu, orzechy włoskie, sezam</span></div><span class="acc-row-price">35 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Biscoff French Tost</span><span class="acc-row-desc">brioszka smażona na maśle z cynamonem, krem biscoff, mus z czarnej porzeczki, ubijana ricotta, chipsy bananowe, owoce, maślana kruszonka</span></div><span class="acc-row-price">35 zł</span></div>
-            </div></div>
-          </div>
-
-          <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Grzanki</span><span class="acc-icon">+</span></button>
-            <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Awokado Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie, pikantne guacamole, jajko sadzone, rukola, pomidorki koktajlowe, borówki, kiełki, płatki chili, szczypiorek, nasiona (dodaj łososia +8 zł)</span></div><span class="acc-row-price">32 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Burrata Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie, burrata, pieczone pomidorki koktajlowe, czerwone pesto, karmelizowana czerwona cebula, oliwa czosnkowa, ser grana padano, listki bazylii, sezam</span></div><span class="acc-row-price">34 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Halloumi Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie, grillowane halloumi, awokado, rukola, piklowana czerwona cebula, sos sriracha-mayo, kiełki, sezam</span></div><span class="acc-row-price">32 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Dyniowy Feta Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie, puszysta dyniowa feta z ricottą, pieczone pomidorki koktajlowe, kurki w maśle z tymiankiem, sezam</span></div><span class="acc-row-price">32 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Zapieksa Premium</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie zapieczona z boczniakami, szpinakiem i cheddarem, kimchi, piklowana czerwona cebula, szczypiorek, ajvar, sezam</span></div><span class="acc-row-price">32 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Chorizo Tost</span><span class="acc-row-desc">grillowana pajda chleba na zakwasie zapieczona z sosem cheddarowym i jalapeño, karmelizowana czerwona cebula, grillowane chorizo, rukola, sezam</span></div><span class="acc-row-price">32 zł</span></div>
-            </div></div>
-          </div>
-
-          <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Funky Bowl</span><span class="acc-icon">+</span></button>
-            <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Hummus Bowl [v]</span><span class="acc-row-desc">hummus, pieczony kalafior, pikantna ciecierzyca, szpinak, papryka, marynowana czerwona cebula, pomidorki koktajlowe, sos orzechowy z miso, szczypiorek, sezam</span></div><span class="acc-row-price">34 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Tofucznica [v]</span><span class="acc-row-desc">tofu smażone z papryką, czerwoną cebulą, szpinakiem i sosem sojowym, sałatka sezonowa, pikantne guacamole, grillowana pajda chleba na zakwasie, szczypiorek, nasiona, kiełki</span></div><span class="acc-row-price">30 zł</span></div>
-            </div></div>
-          </div>
-
-          <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Klasyki</span><span class="acc-icon">+</span></button>
-            <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Jajecznica</span><span class="acc-row-desc">z trzech jajek, smażona na maśle, grillowana pajda chleba na zakwasie, sałatka sezonowa, kiełki, szczypiorek, nasiona — do wyboru: bekon / awokado / łosoś</span></div><span class="acc-row-price">30 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Jajka po Benedyktyńsku</span><span class="acc-row-desc">dwa jajka w koszulkach na grillowanej pajdzie chleba na zakwasie, szpinak, sos holenderski, szczypiorek, kiełki, nasiona — do wyboru: szynka parmeńska / awokado / łosoś</span></div><span class="acc-row-price">32 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Jajka z Harrisą</span><span class="acc-row-desc">dwa jajka sadzone na paście harrisa, labneh, pieczone pomidorki koktajlowe z czosnkiem, miód tymiankowy, grillowana pajda chleba na zakwasie, nasiona</span></div><span class="acc-row-price">30 zł</span></div>
-            </div></div>
-          </div>
-
-          <div class="acc-item">
-            <button class="acc-header" aria-expanded="false"><span>Dla Najmłodszych</span><span class="acc-icon">+</span></button>
-            <div class="acc-body"><div class="acc-body-inner">
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Jajecznica</span><span class="acc-row-desc">z dwóch jajek na maśle z grillowanym pieczywem, pomidorki koktajlowe, ogórek</span></div><span class="acc-row-price">20 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Tost z Serem i Szynką</span><span class="acc-row-desc">tostowana brioszka z cheddarem i serkiem kremowym, szynka, pomidorki koktajlowe, szczypiorek, ketchup</span></div><span class="acc-row-price">20 zł</span></div>
-              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Serniczki</span><span class="acc-row-desc">trzy placuszki twarogowe, śmietana, wiśnie, maślana kruszonka, płatki migdałów, borówki</span></div><span class="acc-row-price">20 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Awokado</span><span class="acc-row-desc">awokado, kiszony ogórek, sos bazyliowy, szpinak, cheddar, sól, pieprz</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Burak–feta</span><span class="acc-row-desc">burak, feta, pestki dyni, pieprz, sos bazyliowy, szpinak</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Cztery sery</span><span class="acc-row-desc">szpinak, cheddar, blue, feta, camembert, suszone pomidory, sól, pieprz</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Ser–gruszka</span><span class="acc-row-desc">gruszka, blue, orzech włoski, sos bazyliowy, szpinak, pieprz cayenne</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Salami</span><span class="acc-row-desc">salami, ogórek kiszony, sos bazyliowy, szpinak, cheddar, sól, pieprz</span></div><span class="acc-row-price">17 zł</span></div>
+              <div class="acc-row"><div class="acc-row-info"><span class="acc-row-name">Kurczak</span><span class="acc-row-desc">kurczak, suszone pomidory, sól, pieprz, sos bazyliowy, szpinak</span></div><span class="acc-row-price">17 zł</span></div>
             </div></div>
           </div>
 
         </div>
-      </div>
-
-      <!-- ── FOOTER INFO ── -->
-      <div class="menu-footer">
-        <p>Mleko roślinne +3 zł &nbsp;·&nbsp; Mleko bez laktozy +1 zł &nbsp;·&nbsp; Syrop +3 zł &nbsp;·&nbsp; Dodatkowy składnik +8 zł</p>
-        <p>Kuchnia otwarta do godz. 15:00 lub do wyczerpania zapasów. Zamówienia przyjmujemy przy barze.</p>
       </div>
 
     </div>
@@ -1888,26 +1895,26 @@
 
       <div class="review-card">
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">Byłam już wiele razy, zatem przyszedł czas na opinie ☺️ Jedzenie top, smakowała mi każda pozycja, którą zamawiałam. Kawa pyszna świetnej jakości. Matcha mimo, że nie jesteście matcharnia to dla mnie absolutny top w całym Rzeszowie, kolor, smak no idealna a ta różana to moje guilty pleasure! 💚 Wasza miejscówka na bulwarach też godna polecenia!</p>
-        <span class="review-author">Klaudia</span>
+        <p class="review-text">Przyjemna kawiarenka z pyszną kawą i domowymi wypiekami są też kanapki bardzo klimatyczna. Obowiązkowe miejsce dla każdego miłośnika czarnego naparu 😁😁😁</p>
+        <span class="review-author">Paweł Kociński</span>
       </div>
 
       <div class="review-card">
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">Super miejsce. Jedzenie bardzo smaczne — polecam jajka po turecku, są bardzo czosnkowe i lekko kwaśne. Pychotka. Do tego chrupiąca pajda chleba. Smaczne herbatki, duży wybór. Miejsce klimatyczne, czyste. Obsługa bardzo miła. Polecam serdecznie i pozdrawiam.</p>
-        <span class="review-author">Adam</span>
+        <p class="review-text">Znają się tu na rzeczy. Kawa speciality w wielu odsłonach zarówno jeśli chodzi o ziarna i palarnie, jak i sposób parzenia. Atmosfera luźna, przyjazna. Za barem uśmiechnięci i otwarci ludzie. Miejsce jest bardzo niewielkie, ale nie sprawia wrażenia ciasnego. Jasno i pogodnie. Polecam :)</p>
+        <span class="review-author">Marcin Chłopaś</span>
       </div>
 
       <div class="review-card">
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">Kawa Rzeszowska! Jest pysznie, wspaniale, wyśmienicie. Już rozumiem dlaczego nie jest łatwo dorwać u Was rano wolny stolik. Kilka osób czekało przed drzwiami jeszcze przed otwarciem… Jajka z harrisą z tymi dwiema wielkimi pajdami chleba — niesamowite. Różana matcha była rewelacyjna. Od dziś moja ulubiona wariacja z matchą w roli głównej. A do kawy w domu wzięłam na wynos ciasteczko red velvet. Pycha!</p>
-        <span class="review-author">Aneta D</span>
+        <p class="review-text">Wyjątkowe miejsce 😊👌 piękny wystrój, świetny klimat, perfekcyjne podejście do klienta. Doświadczenie Teamu czuć w smaku pysznej kawy i wyjątkowych przekąsek 🔥 serdecznie polecam odwiedzić to miejsce, u mnie na liście Rzeszowskich kawiarni numer 1👏👌</p>
+        <span class="review-author">Magdalena Wojtas</span>
       </div>
 
       <div class="review-card">
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">Pyszny, aromatyczny chleb a do tego dobrej jakości składniki i to na bogato :) Wszystko naprawdę ze smakiem skomponowane. Herbata też w słusznej, wielkiej porcji. Polecam :)</p>
-        <span class="review-author">Katarzyna Durawa</span>
+        <p class="review-text">Ładnie, modnie, nowocześnie. Dużo klintów od rana. Kawa niezwykle dobra i aromatyczna. Świeżutki sok. Bardzo dobre ciasto marchewkowe. Miła obsługa.</p>
+        <span class="review-author">Katarzyna Harmak</span>
       </div>
 
     </div>
@@ -1922,38 +1929,38 @@
 
         <div class="contact-block">
           <span class="contact-label">Adres</span>
-          <span class="contact-value">Kościuszki 3<br>Rzeszów 35-030</span>
+          <span class="contact-value">Matejki 8a<br>Rzeszów 35-064</span>
         </div>
 
         <div class="contact-block">
           <span class="contact-label">Telefon</span>
-          <a class="contact-link" href="tel:+48792150377">792 150 377</a>
+          <a class="contact-link" href="tel:+48664020948">664 020 948</a>
         </div>
 
         <div class="contact-block">
           <span class="contact-label">E-mail</span>
-          <a class="contact-link" href="mailto:kawarzeszowska@gmail.com">kawarzeszowska@gmail.com</a>
+          <a class="contact-link" href="mailto:dziarskibarista@gmail.com">dziarskibarista@gmail.com</a>
         </div>
 
         <div class="contact-block">
           <span class="contact-label">Instagram</span>
-          <a class="contact-link" href="https://www.instagram.com/kawarzeszowska/" target="_blank" rel="noopener">
+          <a class="contact-link" href="https://www.instagram.com/dziarskibarista/" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
               <circle cx="12" cy="12" r="4"/>
               <circle cx="17.5" cy="6.5" r="0.7" fill="currentColor" stroke="none"/>
             </svg>
-            @kawarzeszowska
+            @dziarskibarista
           </a>
         </div>
 
         <div class="contact-block">
           <span class="contact-label">Facebook</span>
-          <a class="contact-link" href="https://www.facebook.com/search/top?q=kawa%20rzeszowska" target="_blank" rel="noopener">
+          <a class="contact-link" href="https://www.facebook.com/dziarskibarista/" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
             </svg>
-            Kawa Rzeszowska
+            Dziarski Barista
           </a>
         </div>
 
@@ -1961,11 +1968,11 @@
 
       <div class="contact-map">
         <iframe
-          src="https://maps.google.com/maps?q=Ko%C5%9Bciuszki+3%2C+35-030+Rzesz%C3%B3w&hl=pl&z=17&output=embed"
+          src="https://maps.google.com/maps?q=Matejki+8a%2C+35-064+Rzesz%C3%B3w&hl=pl&z=17&output=embed"
           allowfullscreen=""
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          title="Mapa Kawa Rzeszowska"
+          title="Mapa Dziarski Barista"
         ></iframe>
       </div>
 
@@ -1997,7 +2004,7 @@
     </div>
 
     <div class="contact-footer-bar">
-      <span>© 2025 Kawa Rzeszowska &nbsp;·&nbsp; Kościuszki 3, Rzeszów</span>
+      <span>© 2025 Dziarski Barista &nbsp;·&nbsp; Matejki 8a, Rzeszów</span>
     </div>
   </section>
 
@@ -2054,48 +2061,62 @@
     }
 
     function heroEntranceAnim(letters) {
-      const fadeEls = ['.nav', '.nav-border', '.flank-row',
-                       '.hero-logo-wrap', '.hero-tagline',
-                       '.hamburger', '.nav-mobile-brand']
+      const logoImg = document.querySelector('.hero-logo-wrap img');
+      const menuBtn = document.querySelector('.hero-menu-btn');
+      const restEls = ['.nav', '.nav-border', '.flank-row',
+                       '.hero-tagline', '.hamburger', '.nav-mobile-brand']
         .map(sel => document.querySelector(sel)).filter(Boolean);
 
       const lineEl = document.getElementById('lineFull');
 
-      gsap.set(letters, {
-          y: -140,
-          opacity: 0,
-          rotationX: -90,
-          filter: 'blur(10px)',
-          transformOrigin: '50% 100%',
-        });
+      // Ustaw logo-wrap widoczny, ale img i btn ukryte osobno
+      document.querySelector('.hero-logo-wrap').style.opacity = '1';
+      gsap.set(letters, { y: -180, opacity: 0, x: 0, rotation: 0, transformOrigin: '50% 100%' });
+      gsap.set(logoImg, { y: -window.innerHeight, opacity: 0 });
+      if (menuBtn) gsap.set(menuBtn, { opacity: 0 });
       lineEl.parentElement.style.opacity = '1';
-        gsap.set(fadeEls, { opacity: 0, y: 12 });
+      gsap.set(restEls, { opacity: 0, y: 12 });
 
-        const tl = gsap.timeline();
+      const tl = gsap.timeline();
+      const STAGGER = 0.25;
+      const LETTER_DUR = 0.28 + 0.06 * 4 + 0.22; // 0.74s
 
-        tl.to(letters, {
-          y: 0,
-          opacity: 1,
-          rotationX: 0,
-          filter: 'blur(0px)',
-          duration: 1.4,
-          stagger: { each: 0.042, from: 'start' },
-          ease: 'elastic.out(1, 0.55)',
-        })
-        .to(fadeEls, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.07,
-          ease: 'power2.out',
-        }, '-=0.5')
-        .to(lineEl, {
-          scale: 1.003,
-          duration: 3.5,
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
-        }, '+=0.2');
+      // Litery — jedna po drugiej z wstrząsem
+      tl.to(letters, {
+        keyframes: [
+          { y: 0, opacity: 1, duration: 0.28, ease: 'power4.in' },
+          { x:  -5, y:  2, rotation: -1.5, duration: 0.06, ease: 'none' },
+          { x:   6, y: -1, rotation:  2,   duration: 0.06, ease: 'none' },
+          { x:  -4, y:  1, rotation: -1.5, duration: 0.06, ease: 'none' },
+          { x:   4, y:  0, rotation:  1,   duration: 0.06, ease: 'none' },
+          { x:   0, y:  0, rotation:  0,   duration: 0.22, ease: 'power3.out' },
+        ],
+        stagger: { each: STAGGER, from: 'start' },
+      });
+
+      // 0.5s przerwy, potem samo logo (img) spada z góry ekranu z bounce
+      tl.to(logoImg, {
+        y: 0,
+        opacity: 1,
+        duration: 1.1,
+        ease: 'bounce.out',
+      }, '+=0.5')
+
+      // Reszta strony + przycisk menu (razem)
+      .to([...restEls, ...(menuBtn ? [menuBtn] : [])], {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.07,
+        ease: 'power2.out',
+      }, '-=0.3')
+      .to(lineEl, {
+        scale: 1.003,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      }, '+=0.2');
     }
 
     async function initHero(isResize) {
@@ -2153,15 +2174,13 @@
     const navMenuBtn = document.getElementById('navMenuBtn');
     const navBack    = document.getElementById('navBack');
 
-    navMenuBtn.addEventListener('click', () => {
-      overlay.classList.add('in-sub');
-    });
+    navMenuBtn.addEventListener('click', closeMenu);
     navBack.addEventListener('click', () => {
       overlay.classList.remove('in-sub');
     });
 
     // Close on overlay link click (only non-panel-nav links)
-    overlay.querySelectorAll('.nav-panel--main .nav-overlay-link:not(.nav-overlay-link--has-sub)').forEach(link => {
+    overlay.querySelectorAll('.nav-panel--main .nav-overlay-link').forEach(link => {
       link.addEventListener('click', closeMenu);
     });
     overlay.querySelectorAll('.nav-panel--sub .nav-overlay-link').forEach(link => {
