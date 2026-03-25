@@ -2091,12 +2091,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
-    // ── Ukryj elementy hero natychmiast (sync) ──────────────────
-    ['.nav', '.nav-border', '.hero-logo-wrap', '.hero-tagline',
-     '.hamburger', '.nav-mobile-brand'].forEach(function(sel) {
-      var el = document.querySelector(sel);
-      if (el) el.style.opacity = '0';
-    });
+    // ── Ukryj elementy hero natychmiast (sync) — tylko desktop ──
+    if (window.innerWidth > 768) {
+      ['.nav', '.nav-border', '.hero-logo-wrap', '.hero-tagline',
+       '.hamburger', '.nav-mobile-brand'].forEach(function(sel) {
+        var el = document.querySelector(sel);
+        if (el) el.style.opacity = '0';
+      });
+    }
 
     // ── Fit text to viewport width ──────────────────────────────
     function fitLine(el, targetRatio) {
@@ -2193,7 +2195,22 @@
       if (!heroLetters) {
         fitLine(lineEl, 0.91);
         heroLetters = splitText(lineEl);
-        if (!isResize) heroEntranceAnim(heroLetters);
+        if (!isResize) {
+          if (window.innerWidth > 768) {
+            heroEntranceAnim(heroLetters);
+          } else {
+            // Mobile: pokaż wszystko od razu bez animacji
+            lineEl.parentElement.style.opacity = '1';
+            heroLetters.forEach(l => { l.style.opacity = '1'; l.style.transform = 'none'; });
+            const logoImg = document.querySelector('.hero-logo-wrap img');
+            const menuBtn = document.querySelector('.hero-menu-btn');
+            document.querySelector('.hero-logo-wrap').style.opacity = '1';
+            if (logoImg) logoImg.style.opacity = '1';
+            if (menuBtn) menuBtn.style.opacity = '1';
+            ['.nav', '.hamburger', '.nav-mobile-brand', '.hero-tagline']
+              .forEach(s => { const el = document.querySelector(s); if (el) el.style.opacity = '1'; });
+          }
+        }
       } else {
         fitLine(lineEl, 0.91);
       }
